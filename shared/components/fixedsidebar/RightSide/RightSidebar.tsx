@@ -6,7 +6,7 @@ import { Link } from 'react-router'
 function RightSidebar() {
   return (
     <div>
-      <div className='bg-orange-400'>RightSidebar</div>
+      {/* <div className='bg-orange-400'>RightSidebar</div> */}
       <div className='flex items-center justify-center'>
       <DrawerDialogDemo />
       </div>
