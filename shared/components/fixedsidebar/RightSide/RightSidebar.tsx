@@ -13,7 +13,7 @@ function RightSidebar() {
       
         <StickySearch className='static flex items-center justify-center'/>
         <div className="shadow-lg rounded-md p-4 hover:bg-orange-400 ">
-          <Link to={`/TopSelled`}>
+          <Link  to={`/TopSelled`}>
             <div className="flex items-center gap-2">
               <span className="font-stretch-ultra-expanded text-2xl flex justify-center">
                 Top Selled products of the day

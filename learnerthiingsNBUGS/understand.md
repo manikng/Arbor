@@ -7,9 +7,33 @@
 ![alt text](image-1.png)
 3rd:![alt text](image-2.png)
 //
+ex2:best example
+![alt text](image-3.png)
+![alt text](image-4.png)
+--
+![alt text](image-6.png)
+![alt text](image-7.png)
+--------
+css for post :
+![alt text](image-5.png)
+
+---
+convert string into arrayy  use split:
+![alt text](image-8.png)
+-----
+#
+action in remix : note you need to know you are at which path
+// route('/projects/:projectId', './project.tsx')
+import type { Route } from "./+types/project";
+import { Form } from "react-router";
+import { fakeDb } from "../db";
+
+export async function action({
+  request,
+}: Route.ActionArgs) {}
 
 
-
+-----
 { loaderData }: Route.ComponentProps,--> ye ek comp se dusre comp me data pass krne ke liye use hota hai
 <Welcome message={loaderData.message} />
 

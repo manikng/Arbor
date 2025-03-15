@@ -48,7 +48,10 @@ function Header() {
                 <DropdownMenuItem>
                   <Link to="auth/signup">Sign Up</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>Login</DropdownMenuItem>
+                <DropdownMenuItem>
+                <Link to="auth/login">Login</Link>
+
+                </DropdownMenuItem>
                 <DropdownMenuItem>Team</DropdownMenuItem>
                 <DropdownMenuItem>Subscription</DropdownMenuItem>
               </DropdownMenuContent>

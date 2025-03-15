@@ -2,7 +2,7 @@ import { Button } from "~/components/ui/button";
 import { Form, redirect } from "react-router";
 import {
   getAuth,
-  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword ,
   getAdditionalUserInfo,
 } from "firebase/auth";
 import { getDatabase, ref, set } from "firebase/database";
@@ -31,20 +31,21 @@ export async function action({ request }: Route.ActionArgs) {
     return new Response("missing username,email or password", { status: 400 });
   }
   try {
-    createUserWithEmailAndPassword(auth, email, password)
+    signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log(userCredential);
 
         const userMeta = getAdditionalUserInfo(userCredential);
         if (userMeta?.isNewUser) {
-          set(ref(db, `users/ ${username}`), {
+          set(ref(db, `users/ ${userCredential.user.uid}`), {
+            id:userCredential.user.uid ,
             name: username,
             email: userCredential.user.email,
             password: password,
           });
         }
         
-      alert("You have successfully logged in.");
+      console.log("You have successfully logged in.");
         // putData("users/" + "hi",{email,password})
       })
       .catch((error) => {
@@ -71,7 +72,7 @@ export async function action({ request }: Route.ActionArgs) {
     return new Response("Signup failed", { status: 500 });
   }
 }
-function signup() {
+function Login() {
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
       <div
@@ -84,7 +85,7 @@ function signup() {
       </div>
       <div className="flex-1 flex items-center justify-center p-8 ">
         <div className="w-full max-w-md ">
-          <h1 className="text-3xl font-bold mb-6">Create Your Account</h1>
+          <h1 className="text-3xl font-bold mb-6">Login into  Your Account</h1>
           <Form
             method="post"
             className="space-y-4  p-6 rounded shadow-md border border-pink-200 font-medium "
@@ -126,7 +127,7 @@ function signup() {
               type="submit"
               className="w-full bg-red-500 hover:bg-red-600 text-white"
             >
-              Sign Up
+              Login
             </Button>
           </Form>
         </div>
@@ -134,4 +135,4 @@ function signup() {
     </div>
   );
 }
-export default signup;
+export default Login;
