@@ -16,22 +16,28 @@ import {
 import l3 from './../../../features/images/logo/logomynew.png';
 import MobileSearch from './MobileSearch';
 
+import NewLogo from './../../../image.png';
 import React from "react";
-
+import logo from './../../../logo.png';
+import A_rbor from './../../../A_rbor.jpg';
 function Header() {
   return (
     <div>
       <div className=" bg-gray-50">
-        <header className="flex items-center justify-between p-4 bg-white border-b shadow-sm">
-          <div className="flex items-center space-x-2 text-2xl font-bold text-red-500">
+        <header className=" flex items-center justify-between p-4 bg-white border-b shadow-sm ">
+          <div className=" headerlogocontainer flex items-center space-x-2 mx-2">
             <Link to="/" className="flex items-center space-x-2">
-              <img id="logo" src={l3} alt="logo" className="h-12 w-auto" />
-              <span>Arbor</span>
+
+              {/* <img id="logo" src={logo} alt="logo" className="h-22 w-auto rounded-full bg-white mix-blend-multiply" /> */}
+              <img id="logo" src={NewLogo} alt="logo" className="h-12 headerlogo w-auto  rounded-md " />
+              <img id="logo" src={A_rbor} alt="logo" className="h-20 w-auto rounded-full " />
+              {/* <img id="logo" src={l3} alt="logo" className="h-22 w-auto rounded-full " /> */}
+            
             </Link>
           </div>
           <MobileSearch />
 
-          <button className="rounded-full border px-4 py-2 hover:shadow-md transition">
+          <div className="rounded-full border px-4 py-2 hover:shadow-md transition">
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <div>
@@ -56,7 +62,7 @@ function Header() {
                 <DropdownMenuItem>Subscription</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-          </button>
+          </div>
         </header>
       </div>
     </div>

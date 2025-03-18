@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useFirebase } from "../../database/firebase";
 
-import { putData } from "../../database/firebase";
+// import { putData } from "../../database/firebase";
 
 import inspire from "./../../../features/images/inspiration-f.png";
 import type { Route } from "./+types/Signup";
@@ -44,7 +44,7 @@ export async function action({ request }: Route.ActionArgs) {
           });
         }
         
-      alert("You have successfully logged in.");
+      console.log("You have successfully logged in.");
         // putData("users/" + "hi",{email,password})
       })
       .catch((error) => {
@@ -65,7 +65,7 @@ export async function action({ request }: Route.ActionArgs) {
       window.alert("signup successful");
     }
     console.log(username, email, password);
-    return redirect("/");
+    return redirect(`/user/${username}`);
   } catch (error) {
     console.error("Error during signup:", error);
     return new Response("Signup failed", { status: 500 });

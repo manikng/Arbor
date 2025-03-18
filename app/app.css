@@ -169,17 +169,28 @@ body {
  height: 100vh;
 }
 .middleside{
- width: 50%;
+ width: 45%;
  height: 100vh;
  
 }
 .rightside{
- width: 30%;
+ width: 20%;
  height: 100vh;
  
 }
-.sideContainer{
+/* .sideContainer{
   
+} */
+
+
+/* Logo gradient effect */
+
+
+
+
+
+#logo{
+  
+  background: linear-gradient(45deg, #eb8424 0%, #eb8424 50%, #0d3e66 50%, #f9d423 100%);
+
 }
-
-

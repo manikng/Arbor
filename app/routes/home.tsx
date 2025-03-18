@@ -1,15 +1,34 @@
 import type { Route } from "./+types/home";
 import Header from "./Header/Header";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import NAVBAR from "./../../shared/components/nav/NAVBAR";
-import {
-  Form,
-  redirect,
-  useLoaderData,
-  useActionData
-} from "react-router";
+
+export function meta() {
+  return [
+    { title: "Creativecreata - Social Marketplace" },
+    { name: "description", content: "Connect and create with community" },
+  ];
+}
+
+import { Form, redirect, useLoaderData, useActionData } from "react-router";
 import { Button } from "~/components/ui/button";
 import postDetails from "./../../shared/database/TEMPData/PostData";
+
+import { Cloudinary } from "@cloudinary/url-gen";
+import { auto } from "@cloudinary/url-gen/actions/resize";
+import { autoGravity } from "@cloudinary/url-gen/qualifiers/gravity";
+import { AdvancedImage } from "@cloudinary/react";
+import { CloudinaryUpload } from "./cloudUpload";
+import { set } from "firebase/database";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+} from "firebase/firestore";
+import { db } from "shared/database/firebase";
 
 // //fixed sidebars
 import LeftSidebar from "../../shared/components/fixedsidebar/Leftsidebar/LeftSidebar";
@@ -17,7 +36,8 @@ import MiddleSidebar from "../../shared/components/fixedsidebar/Middleside/Middl
 import RightSidebar from "../../shared/components/fixedsidebar/RightSide/RightSidebar";
 
 // Types
-interface PostData {
+interface Post {
+  dbid: string;
   id: number;
   avatarUrl: string;
   description: string;
@@ -30,55 +50,80 @@ interface PostData {
   comments: number;
 }
 
-export function meta() {
-  return [
-    { title: "Creativecreata - Social Marketplace" },
-    { name: "description", content: "Connect and create with community" },
-  ];
-}
-
 export async function loader() {
-  return { posts: postDetails };
+  //and when load it using loader then fetch its dbid and post data
+
+  const querySnapshotPostData = await getDocs(collection(db, "posts"));
+
+  // querySnapshotPostData.forEach((doc) => {
+  //   console.log(doc.id, " => ", doc.data());
+  // });
+  const AllPosts = querySnapshotPostData.docs.map((doc) => {
+    const  fetchedData= { dbid: doc.id, PostData: doc.data() };
+    const postdata = {...fetchedData.PostData,id:doc.id}
+    // console.log("Post data is : ", postdata);
+    
+    return postdata;
+  });
+  console.log("All posts are : ", AllPosts);
+  return { posts: AllPosts };
 }
 
 export async function action({ request }: Route.ClientActionArgs) {
+  //when inserting into the db no dbid is present as it only generate after the data pushed into the db
+  //so when user post a  img just take sample id and put  dbid as empty string
+  //and when load it using loader then fetch its dbid and post data
+
   const formData = await request.formData();
-  
-  // Extract form data with defaults
+
+  const imageUrlfromCloudinary = await CloudinaryUpload(formData);
+  console.log("Image URL in cloudinary is :", imageUrlfromCloudinary);
+
   const newPost = {
+    dbid: "",
+
     id: postDetails.length + 1,
-    avatarUrl: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
-    description: formData.get("Product-Description")?.toString() || "No description",
-    tags: (formData.get("Tags")?.toString() || "").split(",").map(t => t.trim()),
+    avatarUrl:
+      "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+    description:
+      formData.get("Product-Description")?.toString() || "No description",
+    tags: (formData.get("Tags")?.toString() || "")
+      .split(",")
+      .map((t) => t.trim()),
     price: `$${formData.get("Price")?.toString() || "0"}`,
     productName: formData.get("Product-Name")?.toString() || "Unnamed Product",
-    imageUrl: await handleImageUpload(formData),
+    imageUrl: imageUrlfromCloudinary,
     isliked: false,
     likes: 0,
     comments: 0,
   };
-  postDetails.push(newPost);
-  return redirect("/");
-}
 
-async function handleImageUpload(formData: FormData) {
-  const imageFiles = formData.getAll("images") as File[];
-  if (imageFiles.length === 0) {
-    return "https://miro.medium.com/v2/resize:fit:700/1*wGMXTkdXX96kloQJf7wmbA.png";
+  try {
+    const docRef = await addDoc(collection(db, "posts"), newPost);
+    console.log("Document written with ID: ", docRef.id);
+
+    postDetails.push(newPost);
+
+    // Return success instead of redirecting
+    return { success: true, message: "Post created successfully" };
+  } catch (error) {
+    console.error("Error adding document: ", error);
+    return { success: false, message: "Failed to create post" };
   }
-  return URL.createObjectURL(imageFiles[0]);
 }
 
 export default function Home() {
-  const { posts } = useLoaderData() as { posts: PostData[] };
-  const actionData = useActionData();
+
+
+  const { posts } = useLoaderData() as { posts: Post };
+  console.log("now the post with their dbid are home mai : ", posts);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen w-full mb-4">
       <Header />
       <NAVBAR />
-      <div className="flex mt-16">
-        <LeftSidebar />
+      <div className="flex w-full mt-10  min-h-screen">
+        <LeftSidebar username="" />
         <MiddleSidebar posts={posts} />
         <RightSidebar />
       </div>
@@ -88,13 +133,34 @@ export default function Home() {
 
 // CreatePostCard component
 function CreatePostCard() {
-  const [previewImages, setPreviewImages] = React.useState<string[]>([]);
+  const [previewImage, setPreviewImage] = useState<string>("");
+  const [productDescription, setProductDescription] = useState<string>("");
+  const [productName, setProductName] = useState<string>("");
+  const [tags, setTags] = useState<string>("");
+  const [price, setPrice] = useState<number | string>("");
+  const [image, setImage] = useState<File | null>(null);
+
+  // Get action data to check if form was submitted successfully
+  const actionData = useActionData<{ success: boolean; message: string }>();
+
+  // Reset form when submission is successful
+  useEffect(() => {
+    if (actionData?.success) {
+      setPreviewImage("");
+      setProductDescription("");
+      setProductName("");
+      setTags("");
+      setPrice("");
+      setImage(null);
+    }
+  }, [actionData]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-    const files = Array.from(e.target.files);
-    const urls = files.map(file => URL.createObjectURL(file));
-    setPreviewImages(urls);
+    const file = e.target.files?.[0];
+    if (file) {
+      setPreviewImage(URL.createObjectURL(file));
+      setImage(file);
+    }
   };
 
   return (
@@ -104,6 +170,12 @@ function CreatePostCard() {
       className="mb-6 bg-white rounded-lg shadow-sm border"
     >
       <div className="p-4">
+        {/* {actionData?.success && (
+          <div className="mb-4 p-2 bg-green-100 text-green-700 rounded animate-fade-out">
+            {actionData.message}
+          </div>
+        )} */}
+
         <div className="flex items-center gap-4 mb-4">
           <img
             src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"
@@ -115,6 +187,8 @@ function CreatePostCard() {
             placeholder="Share your creation with the community..."
             className="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             rows={3}
+            onChange={(e) => setProductDescription(e.target.value)}
+            value={productDescription}
           />
         </div>
 
@@ -124,6 +198,8 @@ function CreatePostCard() {
             name="Product-Name"
             placeholder="Product Name"
             className="p-2 border rounded"
+            onChange={(e) => setProductName(e.target.value)}
+            value={productName}
           />
           <input
             type="number"
@@ -131,18 +207,21 @@ function CreatePostCard() {
             placeholder="Price ($)"
             className="p-2 border rounded"
             step="0.01"
+            onChange={(e) => setPrice(e.target.value)}
+            value={price}
           />
           <input
             type="text"
             name="Tags"
             placeholder="Tags (comma separated)"
             className="p-2 border rounded"
+            onChange={(e) => setTags(e.target.value)}
+            value={tags}
           />
           <div className="relative">
             <input
               type="file"
-              name="images"
-              multiple
+              name="postimage"
               onChange={handleImageChange}
               className="absolute opacity-0 w-full h-full cursor-pointer"
               id="image-upload"
@@ -156,17 +235,13 @@ function CreatePostCard() {
             </label>
           </div>
         </div>
-
-        {previewImages.length > 0 && (
+        {previewImage.length > 0 && (
           <div className="flex gap-2 mb-4">
-            {previewImages.map((src, index) => (
-              <img
-                key={index}
-                src={src}
-                alt={`Preview ${index}`}
-                className="w-20 h-20 object-cover rounded border"
-              />
-            ))}
+            <img
+              src={previewImage}
+              alt="Preview"
+              className="w-20 h-20 object-cover rounded border"
+            />
           </div>
         )}
 
@@ -184,194 +259,3 @@ function CreatePostCard() {
 }
 
 export { CreatePostCard };
-
-
-
-
-
-// import type { Route } from "./+types/home";
-// import Header from "./Header/Header";
-// import React, { useState } from "react"; // Import useState
-// import NAVBAR from "./../../shared/components/nav/NAVBAR";
-// import SidebarLeft from "./../../shared/components/sidebar/SidebarLeft";
-// //fixed sidebars
-// import LeftSidebar from "../../shared/components/fixedsidebar/Leftsidebar/h/LeftSidebar";
-// import MiddleSidebar from "../../shared/components/fixedsidebar/Middleside/MiddlwSidebar";
-// import RightSidebar from "../../shared/components/fixedsidebar/RightSide/RightSidebar";
-
-// import { Form } from "react-router";
-// import { Button } from "~/components/ui/button";
-
-// import postDetails from "./../../shared/database/TEMPData/PostData";
-
-// export function meta({}: Route.MetaArgs) {
-//   return [
-//     { title: "New React Router App" },
-//     { name: "description", content: "Welcome to React Router!" },
-//   ];
-// }
-
-// export function loader({ context }: Route.LoaderArgs) {
-//   return { message: "Hello from Vercel" };
-// }
-
-// export default function Home({ loaderData }: Route.ComponentProps) {
-//   return (
-//     <div>
-//       <Header />
-//       <NAVBAR />
-//       <div className="flex mt-1">
-//         <div className="leftside">
-//           <LeftSidebar />
-//         </div>
-//         <div className="middleside">
-//           <MiddleSidebar />
-//         </div>
-//         <div className="rightside">
-//           <RightSidebar />
-//         </div>
-//       </div>
-//       <CreatePostCard /> {/* Render CreatePostCard here */}
-//     </div>
-//   );
-// }
-
-// // Createpost  section
-
-// export async function action({ request }: Route.ClientActionArgs) {
-//   const formData = await request.formData();
-//   console.log("Form Data:", formData);
-
-//   // Extract data from form
-//   const productName = formData.get("Product-Name")?.toString() || "";
-//   const productDescription = formData.get("Product-Description")?.toString() || "";
-//   const tags = formData.get("Tags")?.toString() || "";
-//   const price = parseFloat(formData.get("Price")?.toString() || "0"); // Safely parse price
-//   const imageFiles = formData.getAll("images") as File[]; // Get all image files
-
-//   // Handle Images (Example - adapt as needed)
-//   const imageUrls = await Promise.all(
-//     imageFiles.map(async (file) => {
-//       return URL.createObjectURL(file); // Create a temporary URL
-//     })
-//   );
-//   console.log("Image URLs:", imageUrls);
-
-//   // Create new post object
-//   const newPost = {
-//     id: postDetails.length + 1, // Simple ID generation (can improve)
-//     productName: productName,
-//     productDescription: productDescription,
-//     tags: tags,
-//     price: price,
-//     imageUrl: imageUrls[0] || "https://miro.medium.com/v2/resize:fit:700/1*wGMXTkdXX96kloQJf7wmbA.png", // Use default if no image
-//     likes: 0,
-//     comments: 0,
-//   };
-
-//   // Update postDetails array (This modifies the array in memory - consider a database)
-//   postDetails.push(newPost);
-//   console.log("Updated postDetails:", postDetails);
-
-//   return { success: true, message: "Post created successfully" };
-// }
-
-// function CreatePostCard() {
-//   const [selectedImages, setSelectedImages] = useState<string[]>([]);
-
-//   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     if (!e.target.files) return;
-
-//     const files = Array.from(e.target.files);
-
-//     // Create URLs for the selected images
-//     const imageUrls = files.map((file) => URL.createObjectURL(file));
-//     setSelectedImages(imageUrls);
-//   };
-
-//   return (
-//     <Form method="post" encType="multipart/form-data">
-//       <div className="rounded-sm shadow-md border-b-4 border-t-4 min-h-[200px]">
-//         <div className="productInput flex items-center mx-2 gap-4">
-//           <div className="h-22 w-20 rounded-full overflow-hidden">
-//             <img
-//               src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"
-//               className="object-cover h-full w-full"
-//               alt="User avatar"
-//             />
-//           </div>
-
-//           <label htmlFor="Product-Description" className="flex w-full">
-//             <textarea
-//               name="Product-Description"
-//               id="Product-Description"
-//               placeholder="I have Buga Luga awesome under 5$ just for you"
-//               aria-label="Product-Description"
-//               className="border-4 text-2xl font-mono shadow-lg rounded-2xl w-full"
-//             ></textarea>
-//           </label>
-//         </div>
-//         <div className="productDetail flex justify-evenly items-center mb-2">
-//           <label htmlFor="Tags" className="flex items-center">
-//             <Button size="sm" className="font-mono">
-//               Tags
-//             </Button>
-//             <input
-//               type="text"
-//               name="Tags"
-//               id="Tags"
-//               placeholder="Tags"
-//               className="border-4 shadow-lg rounded-2xl w-22"
-//             />
-//             <input
-//               type="number"
-//               placeholder="Price$"
-//               name="Price"
-//               className="border-4 shadow-lg rounded-2xl w-22"
-//             />
-//           </label>
-//           <input
-//             type="text"
-//             placeholder="Product Name"
-//             name="Product-Name"
-//             id="Product-Name"
-//             className="border-4 shadow-lg rounded-2xl w-32"
-//           />
-//           <Button className="font-mono">Ai description</Button>
-//         </div>
-//         <div className="flex justify-between mx-4 items-center">
-//           <div className="flex items-center gap-2">
-//             <Button className="font-mono">
-//               <label htmlFor="image-upload">
-//                 <input
-//                   type="file"
-//                   name="images"
-//                   multiple
-//                   id="image-upload"
-//                   className="hidden"
-//                   onChange={handleImageChange}
-//                   accept="image/*"
-//                 />
-//                 <span>Img</span>
-//               </label>
-//             </Button>
-//             <Button className="font-mono">GIf</Button>
-//             {selectedImages.map((image, index) => (
-//               <img
-//                 key={index}
-//                 src={image}
-//                 alt={`Selected ${index}`}
-//                 style={{ width: "50px", height: "50px" }}
-//               />
-//             ))}
-//           </div>
-//           <Button className="font-mono" type="submit">
-//             Create Post
-//           </Button>
-//         </div>
-//       </div>
-//     </Form>
-//   );
-// }
-
-// export { CreatePostCard };

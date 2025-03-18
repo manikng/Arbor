@@ -5,7 +5,7 @@ import { Link } from 'react-router'
 
 function RightSidebar() {
   return (
-    <div>
+    <div className='rightside h-screen flex flex-col items-center gap-3.5'>
       {/* <div className='bg-orange-400'>RightSidebar</div> */}
       <div className='flex items-center justify-center'>
       <DrawerDialogDemo />
