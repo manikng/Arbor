@@ -26,9 +26,5 @@ export async function CloudinaryUpload(formData: FormData){
         return "error";
     }
      
-      
-   
-    
-    return imgUrlfetched;
   
   }

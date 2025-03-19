@@ -62,19 +62,20 @@ const postDetails: Post[] = [
 //     comments: 254,
 //   },
 //     {
+//         dbid: "",
 //         id: 4,
 //         avatarUrl:
 //             "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
-//         description: "Limited time offer, don't miss out! Inspired by the vibrant colors of a rainbow, these bangles are a perfect accessory to add a pop of color to any outfit. Ideal for those who love unique and eye-catching jewelry.",
-//         tags: ["SelfMade", "DIY", "limited", "offer"],
-//         price: "$15",
-//         productName: "Rainbow Bangles",
+//         description: "Just finished creating my own Booboo Hoodie from scratch! Started as a weekend project and turned into my favorite piece of clothing. Made with super soft cotton blend fabric and custom embroidery. Each stitch represents hours of dedication and creativity. Perfect for cozy nights or casual outings!",
+//         tags: ["SelfMade", "DIY", "Fashion", "BoobooHoodie", "HandCrafted"],
+//         price: "$45.99",
+//         productName: "Booboo Hoodie",
 //         imageUrl:
-//       "https://hips.hearstapps.com/hmg-prod/images/screenshot-2024-06-26-at-2-12-38-pm-667c5a27e7e2d.png?crop=0.9946380697050938xw:1xh;center,top&resize=980:*",
-//     isliked: true,
-//     likes: 40,
-//     comments: 5,
-//   },
+//             "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633",
+//         isliked: true,
+//         likes: 78,
+//         comments: 23,
+//     },
 // ];
 
 // export default PostData;

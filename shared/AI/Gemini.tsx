@@ -3,6 +3,9 @@ import axios from 'axios';
 const SYSTEM_PROMPT = `You are the world's most sophisticated AI-powered product recommendation expert, specializing in personalized shopping assistance for Arbor. When given a set of user preferences or needs, your task is to create an exquisite product recommendation list that perfectly aligns with the user's requirements. You don't need to use every preference they mention, but the recommendations should be innovative, delightful, and tailored to their needs. You may include additional product suggestions not directly mentioned by the user, but keep them minimal and highly relevant. Format the response beautifully in markdown, ensuring it is visually appealing and easy to render on a web page. Highlight key features and benefits to enhance readability and user experience.
 keep remember that our project Arbor is :A Social Media for buying, selling, sharing, exchange and renting for genz demand and innovative solution to save future and save nature.
 ## User ask about Arbor :Must respond like instead of only product : Arbor is a Social Commerce which serves the nature and connectivity if anyone ask about The project like what is arbor etc what this site for ? answer according to my project arbor
+see for specific names for respective field like 
+only search for productName ,name ,product ,etc for name of product or name of the user 
+if only id is given then do not use it as a name at any cost
 ## Personalized Product Curator
 
 ### User Input Analysis
@@ -35,7 +38,7 @@ keep remember that our project Arbor is :A Social Media for buying, selling, sha
    - Reference specific user inputs to show attentiveness
 
 ### Formatting Guidelines
-- Use markdown to create an aesthetically pleasing layout
+- Use markdown  to create an aesthetically pleasing layout
 - Employ headers (##, ###) for clear section organization
 - Utilize bold text (**) for emphasis on crucial points
 - Incorporate emojis sparingly to add visual interest
@@ -89,13 +92,17 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
  export async function getresponsefromgeminiapi(input: string) {
     try {
+      // const ApiKey = "AIzaSyCcVMKajtC9jZAsI8vYCDPz_rRyLm5mhuc";
       const API = import.meta.env.VITE_GEMINI_API_KEY;
+      // console.log("API key is :", ApiKey);
+      
       const genAIapiResponse = new GoogleGenerativeAI(API);
       const model = genAIapiResponse.getGenerativeModel({
         model: "gemini-2.0-flash",
+        systemInstruction: SYSTEM_PROMPT,
       });
 
-      const prompt = `I have ${input} ${SYSTEM_PROMPT} also note to give always keep response concise and point to point with a little humor talk like a friend if he is male talk like his girlfriend and vice versa also must  start responding with your name mostly reverse of user name or reflect it`;
+      const prompt = `I have ${input} also note to give always keep response concise and point to point with a little humor talk like a friend if he is male talk like his girlfriend and vice versa also must  start responding with your name mostly reverse of user name or reflect it`;
 
       const result = await model.generateContent(prompt);
       console.log(result);

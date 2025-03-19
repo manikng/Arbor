@@ -9,14 +9,14 @@
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
-html,
+/* html,
 body {
   @apply bg-white dark:bg-gray-950;
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
   }
-}
+} */
 
 @layer base {
   :root {
@@ -164,18 +164,41 @@ body {
 }
 
 /* ------MY CSS --------- */
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+html,body{
+  height: 100%;
+}
+*{
+  box-sizing: border-box;
+}
+
+/* Prevent margin collapsing with pseudo-element */
+body::after {
+  content: "";
+  display: table;
+  height: 0px;
+}
+
+
+
 .leftside{
  width: 20%;
- height: 100vh;
+
 }
 .middleside{
  width: 45%;
- height: 100vh;
+
  
 }
 .rightside{
  width: 20%;
- height: 100vh;
+
  
 }
 /* .sideContainer{
@@ -185,6 +208,146 @@ body {
 
 /* Logo gradient effect */
 
+
+/* Markdown content styling */
+.AidescriptionMarkdown {
+  color: var(--color-foreground);
+  line-height: 1.6;
+  overflow-wrap: break-word;
+}
+
+.AidescriptionMarkdown h1,
+.AidescriptionMarkdown h2,
+.AidescriptionMarkdown h3,
+.AidescriptionMarkdown h4,
+.AidescriptionMarkdown h5,
+.AidescriptionMarkdown h6 {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.AidescriptionMarkdown h1 {
+  font-size: 2em;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 0.3em;
+}
+
+.AidescriptionMarkdown h2 {
+  font-size: 1.5em;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 0.3em;
+}
+
+.AidescriptionMarkdown h3 {
+  font-size: 1.25em;
+}
+
+.AidescriptionMarkdown h4 {
+  font-size: 1em;
+}
+
+.AidescriptionMarkdown p {
+  margin-bottom: 1em;
+}
+
+.AidescriptionMarkdown ul,
+.AidescriptionMarkdown ol {
+  margin-bottom: 1em;
+  padding-left: 2em;
+}
+
+.AidescriptionMarkdown ul {
+  list-style-type: disc;
+}
+
+.AidescriptionMarkdown ol {
+  list-style-type: decimal;
+}
+
+.AidescriptionMarkdown li {
+  margin-bottom: 0.25em;
+}
+
+.AidescriptionMarkdown blockquote {
+  padding: 0.5em 1em;
+  border-left: 4px solid var(--color-muted);
+  margin-bottom: 1em;
+  background-color: var(--color-muted);
+  color: var(--color-muted-foreground);
+  border-radius: var(--radius-sm);
+}
+
+.AidescriptionMarkdown pre {
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 1em;
+  margin-bottom: 1em;
+  overflow-x: auto;
+}
+
+.AidescriptionMarkdown code {
+  font-family: monospace;
+  padding: 0.2em 0.4em;
+  background-color: var(--color-muted);
+  border-radius: var(--radius-sm);
+  font-size: 0.9em;
+}
+
+.AidescriptionMarkdown pre code {
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+}
+
+.AidescriptionMarkdown a {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.AidescriptionMarkdown a:hover {
+  text-decoration: none;
+}
+
+.AidescriptionMarkdown img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+}
+
+.AidescriptionMarkdown hr {
+  height: 1px;
+  border: 0;
+  background-color: var(--color-border);
+  margin: 1.5em 0;
+}
+
+.AidescriptionMarkdown table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1em;
+}
+
+.AidescriptionMarkdown th,
+.AidescriptionMarkdown td {
+  padding: 0.5em;
+  border: 1px solid var(--color-border);
+}
+
+.AidescriptionMarkdown th {
+  background-color: var(--color-muted);
+  font-weight: 600;
+}
+
+.AidescriptionMarkdown strong {
+  font-weight: 600;
+}
+
+.AidescriptionMarkdown em {
+  font-style: italic;
+}
 
 
 

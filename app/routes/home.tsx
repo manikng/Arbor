@@ -34,6 +34,7 @@ import { db } from "shared/database/firebase";
 import LeftSidebar from "../../shared/components/fixedsidebar/Leftsidebar/LeftSidebar";
 import MiddleSidebar from "../../shared/components/fixedsidebar/Middleside/MiddlwSidebar";
 import RightSidebar from "../../shared/components/fixedsidebar/RightSide/RightSidebar";
+import { CheckCircleIcon, UploadIcon, XIcon } from "lucide-react";
 
 // Types
 interface Post {
@@ -59,10 +60,10 @@ export async function loader() {
   //   console.log(doc.id, " => ", doc.data());
   // });
   const AllPosts = querySnapshotPostData.docs.map((doc) => {
-    const  fetchedData= { dbid: doc.id, PostData: doc.data() };
-    const postdata = {...fetchedData.PostData,id:doc.id}
+    const fetchedData = { dbid: doc.id, PostData: doc.data() };
+    const postdata = { ...fetchedData.PostData, id: doc.id };
     // console.log("Post data is : ", postdata);
-    
+
     return postdata;
   });
   console.log("All posts are : ", AllPosts);
@@ -105,33 +106,195 @@ export async function action({ request }: Route.ClientActionArgs) {
     postDetails.push(newPost);
 
     // Return success instead of redirecting
-    return { success: true, message: "Post created successfully" };
+    return {
+      success: true,
+      message: "Post created successfully!",
+      // Add redirect header
+      headers: {
+        Location: "/",
+      },
+    };
   } catch (error) {
     console.error("Error adding document: ", error);
-    return { success: false, message: "Failed to create post" };
+    return {
+      success: false,
+      message: "Failed to create post",
+      headers: {
+        Location: "/",
+      },
+    };
   }
 }
 
 export default function Home() {
-
-
-  const { posts } = useLoaderData() as { posts: Post };
+  const { posts } = useLoaderData() as { posts: Post[] };
   console.log("now the post with their dbid are home mai : ", posts);
 
   return (
-    <div className="min-h-screen w-full mb-4">
+    <div className="h-dvh  w-full mb-4">
       <Header />
       <NAVBAR />
-      <div className="flex w-full mt-10  min-h-screen">
+      {/* <div className="flex w-full mt-10  h-screen">
         <LeftSidebar username="" />
         <MiddleSidebar posts={posts} />
         <RightSidebar />
+      </div> */}
+      <div className="flex w-full mt-10 min-h-screen">
+        <LeftSidebar username="" className="flex-shrink-0" />
+        <MiddleSidebar posts={posts} className="flex-grow" />
+        <RightSidebar className="flex-shrink-0" />
       </div>
     </div>
   );
 }
 
 // CreatePostCard component
+// function CreatePostCard() {
+//   const [previewImage, setPreviewImage] = useState<string>("");
+//   const [productDescription, setProductDescription] = useState<string>("");
+//   const [productName, setProductName] = useState<string>("");
+//   const [tags, setTags] = useState<string>("");
+//   const [price, setPrice] = useState<number | string>("");
+//   const [image, setImage] = useState<File | null>(null);
+
+//   // Get action data to check if form was submitted successfully
+//   // const actionData = useActionData<{ success: boolean; message: string }>();
+//   const actionData = useActionData<{ success: boolean; message: string }>();
+//   console.log("Action data is : ", actionData);
+
+//   // Reset form when submission is successful
+//   useEffect(() => {
+//     if (actionData?.success) {
+//       setPreviewImage("");
+//       setProductDescription("");
+//       setProductName("");
+//       setTags("");
+//       setPrice("");
+//       setImage(null);
+
+//       // Reset file input DOM element
+//       const fileInput = document.getElementById("image-upload") as HTMLInputElement;
+//       if (fileInput) fileInput.value = "";
+//     }
+//   }, [actionData]);
+
+//   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//     const file = e.target.files?.[0];
+//     if (file) {
+//       setPreviewImage(URL.createObjectURL(file));
+//       setImage(file);
+//     }
+//   };
+
+//   return (
+//     <Form
+//       method="post"
+//       encType="multipart/form-data"
+//       className="mb-6 bg-white rounded-lg shadow-sm border"
+//     >
+//       <div className="p-4">
+//         {/* {actionData?.success && (
+//           <div className="mb-4 p-2 bg-green-100 text-green-700 rounded animate-fade-out">
+//             {actionData.message}
+//           </div>
+//         )} */}
+
+//         <div className="flex items-center gap-4 mb-4">
+//           <img
+//             src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"
+//             className="w-12 h-12 rounded-full"
+//             alt="User"
+//           />
+//           <textarea
+//             name="Product-Description"
+//             placeholder="Share your creation with the community..."
+//             className="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+//             rows={3}
+//             onChange={(e) => setProductDescription(e.target.value)}
+//             value={productDescription}
+//           />
+//         </div>
+
+//         <div className="grid grid-cols-2 gap-4 mb-4">
+//           <input
+//             type="text"
+//             name="Product-Name"
+//             placeholder="Product Name"
+//             className="p-2 border rounded"
+//             onChange={(e) => setProductName(e.target.value)}
+//             value={productName}
+//           />
+//           <input
+//             type="number"
+//             name="Price"
+//             placeholder="Price ($)"
+//             className="p-2 border rounded"
+//             step="0.01"
+//             onChange={(e) => setPrice(e.target.value)}
+//             value={price}
+//           />
+//           <input
+//             type="text"
+//             name="Tags"
+//             placeholder="Tags (comma separated)"
+//             className="p-2 border rounded"
+//             onChange={(e) => setTags(e.target.value)}
+//             value={tags}
+//           />
+//           <div className="relative">
+//             <input
+//               type="file"
+//               name="postimage"
+//               onChange={handleImageChange}
+//               className="absolute opacity-0 w-full h-full cursor-pointer"
+//               id="image-upload"
+//               accept="image/*"
+//             />
+//             <label
+//               htmlFor="image-upload"
+//               className="block p-2 text-center border rounded bg-gray-100 hover:bg-gray-200 cursor-pointer"
+//             >
+//               Upload Images
+//             </label>
+//           </div>
+//         </div>
+//         {previewImage.length > 0 && (
+//           <div className="flex gap-2 mb-4">
+//             <img
+//               src={previewImage}
+//               alt="Preview"
+//               className="w-20 h-20 object-cover rounded border"
+//             />
+//           </div>
+//         )}
+
+//         <div className="flex justify-end gap-4 pb-4 pr-4">
+//         <button
+//           type="button"
+//           onClick={() => {
+//             setPreviewImage("");
+//             setProductDescription("");
+//             setProductName("");
+//             setTags("");
+//             setPrice("");
+//             setImage(null);
+//           }}
+//           className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+//         >
+//           Clear
+//         </button>
+//           <Button
+//             type="submit"
+//            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg shadow-sm hover:shadow-md transition-all"
+//           >
+//             Post Creation
+//           </Button>
+//         </div>
+//       </div>
+//     </Form>
+//   );
+// }
+
 function CreatePostCard() {
   const [previewImage, setPreviewImage] = useState<string>("");
   const [productDescription, setProductDescription] = useState<string>("");
@@ -141,7 +304,9 @@ function CreatePostCard() {
   const [image, setImage] = useState<File | null>(null);
 
   // Get action data to check if form was submitted successfully
+  // const actionData = useActionData<{ success: boolean; message: string }>();
   const actionData = useActionData<{ success: boolean; message: string }>();
+  console.log("Action data is : ", actionData);
 
   // Reset form when submission is successful
   useEffect(() => {
@@ -152,6 +317,12 @@ function CreatePostCard() {
       setTags("");
       setPrice("");
       setImage(null);
+
+      // Reset file input DOM element
+      const fileInput = document.getElementById(
+        "image-upload"
+      ) as HTMLInputElement;
+      if (fileInput) fileInput.value = "";
     }
   }, [actionData]);
 
@@ -167,58 +338,90 @@ function CreatePostCard() {
     <Form
       method="post"
       encType="multipart/form-data"
-      className="mb-6 bg-white rounded-lg shadow-sm border"
+      className="mb-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-orange-200"
     >
-      <div className="p-4">
-        {/* {actionData?.success && (
-          <div className="mb-4 p-2 bg-green-100 text-green-700 rounded animate-fade-out">
-            {actionData.message}
+      <div className="p-6">
+        {/* Success/Error Messages */}
+        {actionData?.message && (
+          <div
+            className={`mb-6 p-4 rounded-lg flex items-center gap-3 ${
+              actionData.success
+                ? "bg-green-100 text-green-800"
+                : "bg-red-100 text-red-800"
+            }`}
+          >
+            <CheckCircleIcon className="w-5 h-5" />
+            <span>{actionData.message}</span>
           </div>
-        )} */}
+        )}
 
-        <div className="flex items-center gap-4 mb-4">
+        {/* Author Section */}
+        <div className="flex items-center gap-4 mb-6 p-4 bg-purple-50 rounded-xl">
           <img
             src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"
-            className="w-12 h-12 rounded-full"
+            className="w-14 h-14 rounded-full border-2 border-purple-200"
             alt="User"
           />
           <textarea
             name="Product-Description"
             placeholder="Share your creation with the community..."
-            className="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            rows={3}
+            className="flex-1 p-3 text-lg bg-transparent focus:outline-none placeholder-gray-400 resize-none"
+            rows={2}
             onChange={(e) => setProductDescription(e.target.value)}
             value={productDescription}
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          <input
-            type="text"
-            name="Product-Name"
-            placeholder="Product Name"
-            className="p-2 border rounded"
-            onChange={(e) => setProductName(e.target.value)}
-            value={productName}
-          />
-          <input
-            type="number"
-            name="Price"
-            placeholder="Price ($)"
-            className="p-2 border rounded"
-            step="0.01"
-            onChange={(e) => setPrice(e.target.value)}
-            value={price}
-          />
-          <input
-            type="text"
-            name="Tags"
-            placeholder="Tags (comma separated)"
-            className="p-2 border rounded"
-            onChange={(e) => setTags(e.target.value)}
-            value={tags}
-          />
+        {/* Form Grid */}
+        <div className="space-y-4 mb-6">
           <div className="relative">
+            <input
+              type="text"
+              name="Product-Name"
+              placeholder=" "
+              className="w-full p-4 pt-6 bg-gray-50 rounded-lg border border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 peer"
+              onChange={(e) => setProductName(e.target.value)}
+              value={productName}
+            />
+            <label className="absolute top-2 left-4 text-sm text-gray-500 pointer-events-none transition-all peer-focus:text-purple-600">
+              Product Name
+            </label>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="relative">
+              <input
+                type="number"
+                name="Price"
+                placeholder=" "
+                className="w-full p-4 pt-6 bg-gray-50 rounded-lg border border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 peer"
+                step="0.01"
+                onChange={(e) => setPrice(e.target.value)}
+                value={price}
+              />
+              <label className="absolute top-2 left-4 text-sm text-gray-500 pointer-events-none transition-all peer-focus:text-purple-600">
+                Price ($)
+              </label>
+              <span className="absolute right-4 top-5 text-gray-400">$</span>
+            </div>
+
+            <div className="relative">
+              <input
+                type="text"
+                name="Tags"
+                placeholder=" "
+                className="w-full p-4 pt-6 bg-gray-50 rounded-lg border border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 peer"
+                onChange={(e) => setTags(e.target.value)}
+                value={tags}
+              />
+              <label className="absolute top-2 left-4 text-sm text-gray-500 pointer-events-none transition-all peer-focus:text-purple-600">
+                Tags (comma separated)
+              </label>
+            </div>
+          </div>
+
+          {/* File Upload */}
+          <div className="relative group">
             <input
               type="file"
               name="postimage"
@@ -229,28 +432,59 @@ function CreatePostCard() {
             />
             <label
               htmlFor="image-upload"
-              className="block p-2 text-center border rounded bg-gray-100 hover:bg-gray-200 cursor-pointer"
+              className="block p-8 text-center border-2 border-dashed border-gray-200 rounded-lg bg-gray-50 hover:border-purple-300 group-active:border-purple-400 transition-colors cursor-pointer"
             >
-              Upload Images
+              <div className="space-y-2">
+                <UploadIcon className="w-8 h-8 text-purple-500 mx-auto" />
+                <p className="text-gray-600 font-medium">
+                  Drag & drop or click to upload
+                </p>
+                <p className="text-sm text-gray-400">PNG, JPG up to 5MB</p>
+              </div>
             </label>
           </div>
         </div>
-        {previewImage.length > 0 && (
-          <div className="flex gap-2 mb-4">
+
+        {/* Image Preview */}
+        {previewImage && (
+          <div className="mb-6 relative group">
             <img
               src={previewImage}
               alt="Preview"
-              className="w-20 h-20 object-cover rounded border"
+              className="w-full h-48 object-cover rounded-xl border border-gray-100 shadow-sm transition-transform group-hover:scale-105"
             />
+            <button
+              type="button"
+              onClick={() => setPreviewImage("")}
+              className="absolute top-2 right-2 p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-sm hover:shadow-md transition-all"
+            >
+              <XIcon className="w-5 h-5 text-gray-600" />
+            </button>
           </div>
         )}
 
-        <div className="flex justify-end">
+        {/* Form Actions */}
+        <div className="flex justify-between items-center pt-4 border-t border-gray-100">
+          <button
+            type="button"
+            onClick={() => {
+              setPreviewImage("");
+              setProductDescription("");
+              setProductName("");
+              setTags("");
+              setPrice("");
+              setImage(null);
+            }}
+            className="px-5 py-2.5 text-gray-500 hover:text-gray-700 transition-colors flex items-center gap-2"
+          >
+            <XIcon className="w-5 h-5" />
+            Clear Form
+          </button>
           <Button
             type="submit"
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg"
+            className="bg-gradient-to-br from-purple-600 to-orange-600 hover:from-purple-700 hover:to-orange-700 text-white px-8 py-2.5 rounded-lg shadow-sm hover:shadow-lg transition-all"
           >
-            Post Creation
+            Publish Post
           </Button>
         </div>
       </div>
