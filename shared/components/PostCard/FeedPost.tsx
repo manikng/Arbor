@@ -44,32 +44,8 @@ interface FeedPostProps {
     React.useState(false);
   const [renderComments, setRenderComments] = React.useState(false);
   const [commentValue, setCommentValue] = React.useState("");
-  // const HandleAiDescriptionClick = async () => {
-  //   if (showAIDescription) {
-  //     setGeneratingAiDescription(true)
-  //     setShowAIDescription((prev)=> !prev);
-  //   } else {
-  //     // const response = await getresponsefromgeminiapi(localPost.productName);
-  //     // console.log("the response is : ", response);
-  //     // setShowAIDescription(true);
-  //     setGeneratingAiDescription(true);
-  //     const curpost = JSON.stringify(localPost);
-  //     console.log("the local post is : ", curpost);
-  //     const response = await getresponsefromgeminiapi(curpost);
-  //     try {
-  //       if(response){
-  //         setAiDescription(response);
-  //         setGeneratingAiDescription(false);
-  //         setShowAIDescription(true);
-
-  //     }} catch (error) {
-  //       console.log("error getting response", error);
-
-  //     }
-
-  //   }
-  // };
-
+  console.log("the avatar: ", localPost.avatarUrl);
+  
   const HandleAiDescriptionClick = async () => {
     // Immediately handle hide/cancel action
     if (showAIDescription || generatingAiDescription) {
@@ -131,37 +107,7 @@ interface FeedPostProps {
   };
   console.log("the rendercomment is: ", renderComments);
 
-  // function handleCommentClick() {
-  //   const docRef = doc(db, "posts", localPost.id);
-  //   // Get existing comments or initialize as empty array
-  //   const existingComments = localPost?.userComments || [];
-  //   // Create new flat array with the new comment
-  //   const updatedComments = [...existingComments, commentValue];
-
-  //   console.log("the user comments are : ", updatedComments);
-
-  //   setDoc(docRef, {
-  //     ...localPost,
-  //     comments: localPost.comments + 1,
-  //     userComments: updatedComments
-  //   }, {merge:true}).then((res)=>{
-  //     console.log("Document written with ID: ", localPost.id);
-  //     console.log("the response is : ", res);
-  //     // Update local state to reflect changes
-  //     setLocalPost(prev => ({
-  //       ...prev,
-  //       comments: prev.comments + 1,
-  //       userComments: updatedComments
-  //     }));
-  //   }).catch((error)=>{
-  //     console.error("Error adding document: ", error);
-  //   });
-  //   console.log("the comment is : ", commentValue);
-  //   setCommentValue("");
-
-  // }
-  // Update your handleCommentClick function
-
+  
   function handleCommentClick() {
     if (!commentValue.trim()) return; // Don't submit empty comments
 
@@ -440,3 +386,59 @@ interface FeedPostProps {
 export default FeedPost;
 
 
+// function handleCommentClick() {
+  //   const docRef = doc(db, "posts", localPost.id);
+  //   // Get existing comments or initialize as empty array
+  //   const existingComments = localPost?.userComments || [];
+  //   // Create new flat array with the new comment
+  //   const updatedComments = [...existingComments, commentValue];
+
+  //   console.log("the user comments are : ", updatedComments);
+
+  //   setDoc(docRef, {
+  //     ...localPost,
+  //     comments: localPost.comments + 1,
+  //     userComments: updatedComments
+  //   }, {merge:true}).then((res)=>{
+  //     console.log("Document written with ID: ", localPost.id);
+  //     console.log("the response is : ", res);
+  //     // Update local state to reflect changes
+  //     setLocalPost(prev => ({
+  //       ...prev,
+  //       comments: prev.comments + 1,
+  //       userComments: updatedComments
+  //     }));
+  //   }).catch((error)=>{
+  //     console.error("Error adding document: ", error);
+  //   });
+  //   console.log("the comment is : ", commentValue);
+  //   setCommentValue("");
+
+  // }
+  // Update your handleCommentClick function
+//-------------
+  // const HandleAiDescriptionClick = async () => {
+  //   if (showAIDescription) {
+  //     setGeneratingAiDescription(true)
+  //     setShowAIDescription((prev)=> !prev);
+  //   } else {
+  //     // const response = await getresponsefromgeminiapi(localPost.productName);
+  //     // console.log("the response is : ", response);
+  //     // setShowAIDescription(true);
+  //     setGeneratingAiDescription(true);
+  //     const curpost = JSON.stringify(localPost);
+  //     console.log("the local post is : ", curpost);
+  //     const response = await getresponsefromgeminiapi(curpost);
+  //     try {
+  //       if(response){
+  //         setAiDescription(response);
+  //         setGeneratingAiDescription(false);
+  //         setShowAIDescription(true);
+
+  //     }} catch (error) {
+  //       console.log("error getting response", error);
+
+  //     }
+
+  //   }
+  // };

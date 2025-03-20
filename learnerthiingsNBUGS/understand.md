@@ -351,7 +351,10 @@ FOR E.G:
           />
 :![alt text](image-17.png)
 
-
+uploading inot cloudinary:
+![alt text](image-18.png) :nodejs:cloudinary.v2.uploader
+.upload("https://www.example.com/sample.jpg")
+.then(result=>console.log(result));
 
 
 //-----------------------------

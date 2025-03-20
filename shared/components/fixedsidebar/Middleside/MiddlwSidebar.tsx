@@ -1,21 +1,9 @@
 import React from "react";
 import FeedPost from "./../../PostCard/FeedPost";
 import { CreatePostCard } from "~/routes/home";
+import type { Post } from "shared/types/post";
 
-interface Post {
-dbid: string;
 
-id: string;
-avatarUrl: string;
-description: string;
-tags: string[];
-price: string;
-productName: string;
-imageUrl: string;
-isliked: boolean;
-likes: number;
-comments: number;
-}
 
 interface MiddleSidebarProps {
 posts: Post[];
