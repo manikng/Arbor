@@ -24,6 +24,7 @@ import {
 } from "firebase/firestore";
 import { data } from "react-router";
 import { set ,ref, getDatabase } from "firebase/database";
+import { validateConfig } from "../config/validateConfig"; // Adjust the path as necessary
 
 // import { collection, addDoc } from "firebase/firestore"; 
 
@@ -37,6 +38,9 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
+
+// Validate the configuration
+validateConfig(firebaseConfig);
 
 export const FirebaseContext = createContext(null);
 
