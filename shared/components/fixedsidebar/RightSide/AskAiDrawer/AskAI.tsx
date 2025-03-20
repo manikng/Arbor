@@ -107,7 +107,7 @@ function Topview({ className }: TopviewProps) {
             <input
               type="text"
               placeholder="e.g I want nike shoes for rent or buy under 30$"
-              className="w-full outline-none px-4"
+              className="w-full outline-none rounded-full px-4"
               aria-label="Search with ai"
               value={input}
               onChange={(e) => setInput(e.target.value)}

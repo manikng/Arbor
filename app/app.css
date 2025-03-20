@@ -215,11 +215,11 @@ body::after {
 }
 
 /* Remove focus outline and replace with custom styling */
-input:focus {
+/* input:focus {
   outline: none;
   box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.4);
   border-color: #F59E0B;
-}
+} */
 
 /* end */
 
