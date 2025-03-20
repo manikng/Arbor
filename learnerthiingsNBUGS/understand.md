@@ -309,7 +309,12 @@ then use getDoc(1 arg: docRef) method to get the data from that path
 fore.g:const docSnap = await getDoc(docRef);
 3. get data using : docSnap.data() method and id by docSnap.id
 
-
+//----------------new data like commenting in the firebase----------
+//1. get the reference of the path where you want to add the data
+const docRef = doc(db, "posts", localPost.id);
+2. use setDoc(2 args:docRef,object data) method to add the data
+use async await or then and catch method to handle the promise
+full  code :![alt text](image-13.png)
 
 //---------------
 <ul> cannot be a descendant of <p>.
@@ -318,10 +323,48 @@ for e.g:<div className="text-sm text-purple-900 leading-relaxed">
               <Markdown>{AiDescription}</Markdown>
             </div>✔
 <p> <markdown> </p>❌
+//?. is used to check if the object is null or not
+for e.g: const userMeta = getAdditionalUserInfo(userCredential);
+        if (userMeta?.isNewUser) {
+          set(ref(db, `users/ ${username}`), {
+            name: username,
+            email: userCredential.user.email,
+            password: password,
+          });
+        }
+
+//----------exampe 2:
+approach with optional chaining (?.) is good practice for runtime safety, but to make it fully TypeScript compliant, you need to properly define the optional property in your interface.
+![alt text](image-15.png)
+
+
+//-----------RANDDOM AVATAR GENERATOR FETCHING FROM :https://xsgames.co/randomusers/ : API 
+![alt text](image-16.png)
+  src={`https://xsgames.co/randomusers/avatar.php?g=${(Math.floor(Math.random()*10) >5)? "male" :"female"  }`}
+
+FOR E.G:
+ <img
+            // src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"
+            src={`https://xsgames.co/randomusers/avatar.php?g=${(Math.floor(Math.random()*10) >5)? "male" :"female"  }`}
+            className="w-14 h-14 rounded-full border-2 border-purple-200"
+            alt="User"
+          />
+:![alt text](image-17.png)
+
+
+
+
+//-----------------------------
 //--------------------CSSSSSSSSS------------------------
 GOLDEN COLORS OF TAILWIND CSS:
  <span className="text-sm bg-gradient-to-br from-orange-100 to-orange-50 text-orange-800 px-3 py-1 rounded-full border border-orange-200">
               ${localPost.price}
             </span>
     LIKE :![alt text](image-11.png)
-        
+
+
+2. aria label is v imp so that the screen reader can read the content of the button
+3. name ,id ,value is also imp for the input field
+
+//4---------------csss some animation styling:
+![alt text](image-14.png)

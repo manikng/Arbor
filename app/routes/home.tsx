@@ -51,6 +51,11 @@ interface Post {
   comments: number;
 }
 
+
+
+  const  avturlapi  = `https://xsgames.co/randomusers/avatar.php?g=${(Math.floor(Math.random()*10) >5)? "male" :"female" } `;
+  console.log("Avatar url is : ", avturlapi);
+
 export async function loader() {
   //and when load it using loader then fetch its dbid and post data
 
@@ -84,8 +89,7 @@ export async function action({ request }: Route.ClientActionArgs) {
     dbid: "",
 
     id: postDetails.length + 1,
-    avatarUrl:
-      "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+    avatarUrl: avturlapi,
     description:
       formData.get("Product-Description")?.toString() || "No description",
     tags: (formData.get("Tags")?.toString() || "")
@@ -148,152 +152,7 @@ export default function Home() {
   );
 }
 
-// CreatePostCard component
-// function CreatePostCard() {
-//   const [previewImage, setPreviewImage] = useState<string>("");
-//   const [productDescription, setProductDescription] = useState<string>("");
-//   const [productName, setProductName] = useState<string>("");
-//   const [tags, setTags] = useState<string>("");
-//   const [price, setPrice] = useState<number | string>("");
-//   const [image, setImage] = useState<File | null>(null);
 
-//   // Get action data to check if form was submitted successfully
-//   // const actionData = useActionData<{ success: boolean; message: string }>();
-//   const actionData = useActionData<{ success: boolean; message: string }>();
-//   console.log("Action data is : ", actionData);
-
-//   // Reset form when submission is successful
-//   useEffect(() => {
-//     if (actionData?.success) {
-//       setPreviewImage("");
-//       setProductDescription("");
-//       setProductName("");
-//       setTags("");
-//       setPrice("");
-//       setImage(null);
-
-//       // Reset file input DOM element
-//       const fileInput = document.getElementById("image-upload") as HTMLInputElement;
-//       if (fileInput) fileInput.value = "";
-//     }
-//   }, [actionData]);
-
-//   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     const file = e.target.files?.[0];
-//     if (file) {
-//       setPreviewImage(URL.createObjectURL(file));
-//       setImage(file);
-//     }
-//   };
-
-//   return (
-//     <Form
-//       method="post"
-//       encType="multipart/form-data"
-//       className="mb-6 bg-white rounded-lg shadow-sm border"
-//     >
-//       <div className="p-4">
-//         {/* {actionData?.success && (
-//           <div className="mb-4 p-2 bg-green-100 text-green-700 rounded animate-fade-out">
-//             {actionData.message}
-//           </div>
-//         )} */}
-
-//         <div className="flex items-center gap-4 mb-4">
-//           <img
-//             src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"
-//             className="w-12 h-12 rounded-full"
-//             alt="User"
-//           />
-//           <textarea
-//             name="Product-Description"
-//             placeholder="Share your creation with the community..."
-//             className="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-//             rows={3}
-//             onChange={(e) => setProductDescription(e.target.value)}
-//             value={productDescription}
-//           />
-//         </div>
-
-//         <div className="grid grid-cols-2 gap-4 mb-4">
-//           <input
-//             type="text"
-//             name="Product-Name"
-//             placeholder="Product Name"
-//             className="p-2 border rounded"
-//             onChange={(e) => setProductName(e.target.value)}
-//             value={productName}
-//           />
-//           <input
-//             type="number"
-//             name="Price"
-//             placeholder="Price ($)"
-//             className="p-2 border rounded"
-//             step="0.01"
-//             onChange={(e) => setPrice(e.target.value)}
-//             value={price}
-//           />
-//           <input
-//             type="text"
-//             name="Tags"
-//             placeholder="Tags (comma separated)"
-//             className="p-2 border rounded"
-//             onChange={(e) => setTags(e.target.value)}
-//             value={tags}
-//           />
-//           <div className="relative">
-//             <input
-//               type="file"
-//               name="postimage"
-//               onChange={handleImageChange}
-//               className="absolute opacity-0 w-full h-full cursor-pointer"
-//               id="image-upload"
-//               accept="image/*"
-//             />
-//             <label
-//               htmlFor="image-upload"
-//               className="block p-2 text-center border rounded bg-gray-100 hover:bg-gray-200 cursor-pointer"
-//             >
-//               Upload Images
-//             </label>
-//           </div>
-//         </div>
-//         {previewImage.length > 0 && (
-//           <div className="flex gap-2 mb-4">
-//             <img
-//               src={previewImage}
-//               alt="Preview"
-//               className="w-20 h-20 object-cover rounded border"
-//             />
-//           </div>
-//         )}
-
-//         <div className="flex justify-end gap-4 pb-4 pr-4">
-//         <button
-//           type="button"
-//           onClick={() => {
-//             setPreviewImage("");
-//             setProductDescription("");
-//             setProductName("");
-//             setTags("");
-//             setPrice("");
-//             setImage(null);
-//           }}
-//           className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
-//         >
-//           Clear
-//         </button>
-//           <Button
-//             type="submit"
-//            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg shadow-sm hover:shadow-md transition-all"
-//           >
-//             Post Creation
-//           </Button>
-//         </div>
-//       </div>
-//     </Form>
-//   );
-// }
 
 function CreatePostCard() {
   const [previewImage, setPreviewImage] = useState<string>("");
@@ -302,6 +161,7 @@ function CreatePostCard() {
   const [tags, setTags] = useState<string>("");
   const [price, setPrice] = useState<number | string>("");
   const [image, setImage] = useState<File | null>(null);
+
 
   // Get action data to check if form was submitted successfully
   // const actionData = useActionData<{ success: boolean; message: string }>();
@@ -358,7 +218,8 @@ function CreatePostCard() {
         {/* Author Section */}
         <div className="flex items-center gap-4 mb-6 p-4 bg-purple-50 rounded-xl">
           <img
-            src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"
+            // src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"
+            src={avturlapi}
             className="w-14 h-14 rounded-full border-2 border-purple-200"
             alt="User"
           />

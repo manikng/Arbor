@@ -201,12 +201,27 @@ body::after {
 
  
 }
-/* .sideContainer{
-  
-} */
 
+/* some animation styling */
 
-/* Logo gradient effect */
+/* Add to your CSS */
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Remove focus outline and replace with custom styling */
+input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.4);
+  border-color: #F59E0B;
+}
+
+/* end */
 
 
 /* Markdown content styling */

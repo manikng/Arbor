@@ -1,42 +1,111 @@
-import React, { useEffect } from "react";
-import { setDoc, updateDoc } from "firebase/firestore";
+my:
+// export default function FeedPost({ post }: FeedPostProps) {
+//   const [localPost, setLocalPost] = React.useState(post);
+//   const [showAIDescription, setShowAIDescription] = React.useState(false);
 
-import { Button } from "~/components/ui/button";
-import {
-  OpenHeartIcon,
-  FilledHeartIcon,
-  ShareIcon,
-  CommentIcon,
-} from "./../../icons/icons";
-import { getresponsefromgeminiapi } from "shared/AI/Gemini";
-import { SplineIcon } from "lucide-react";
+//   const toggleLike = () => {
+//     setLocalPost(prev => ({
+//       ...prev,
+//       isliked: !prev.isliked,
+//       likes: prev.isliked ? prev.likes - 1 : prev.likes + 1
+//     }));
+//   };
 
-import Markdown from "react-markdown";
-import { doc } from "firebase/firestore";
-import { db } from "shared/database/firebase";
-import { update } from "firebase/database";
+//   return (
+//     <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100 overflow-hidden">
+//       {/* Header */}
+//       <div className="flex items-center p-6 pb-4 gap-4">
+//         <img
+//           src={localPost.avatarUrl}
+//           className="w-12 h-12 rounded-full border-2 border-purple-500 p-0.5"
+//           alt="User avatar"
+//         />
+//         <div className="flex-1">
+//           <div className="flex items-center gap-3 mb-1">
+//             <h3 className="font-bold text-gray-900 text-lg">{localPost.productName}</h3>
+//             <span className="text-sm bg-gradient-to-r from-purple-100 to-blue-100 text-purple-800 px-3 py-1 rounded-full">
+//               ${localPost.price}
+//             </span>
+//           </div>
+//           <div className="flex flex-wrap gap-2">
+//             {localPost.tags.map((tag, index) => (
+//               <span
+//                 key={index}
+//                 className="text-sm font-sans font-medium text-purple-700 bg-purple-50 px-2.5 py-1 rounded-full"
+//               >
+//                 #{tag}
+//               </span>
+//             ))}
+//           </div>
+//         </div>
+//       </div>
 
-interface Post {
-  dbid: string;
+//       {/* Content */}
+//       <div className="px-6 pb-6">
+//         <div className="group relative mb-4">
+//           <img
+//             src={localPost.imageUrl}
+//             alt="Post content"
+//             className="w-full h-80 object-cover rounded-xl border border-gray-100 shadow-sm hover:border-purple-100 transition-colors"
+//           />
+//           <button
+//             onClick={() => setShowAIDescription(!showAIDescription)}
+//             className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-lg shadow-sm text-sm font-semibold text-purple-700 hover:bg-white transition-all hover:shadow-md"
+//           >
+//             {showAIDescription ? 'Hide AI Insight' : 'Generate AI Insight'}
+//           </button>
+//         </div>
 
-  id: string;
-  avatarUrl: string;
-  description: string;
-  tags: string[];
-  price: string;
-  productName: string;
-  imageUrl: string;
-  isliked: boolean;
-  likes: number;
-  comments: number;
-}
+//         {showAIDescription && (
+//           <div className="mt-4 p-4 bg-purple-50 rounded-lg border border-purple-100">
+//             <p className="text-sm text-purple-900 italic">
+//               AI-generated product insight describing key features and benefits...
+//             </p>
+//           </div>
+//         )}
 
-interface FeedPostProps {
-  post: Post;
-}
+//         <p className="text-gray-700 mb-4 text-base leading-relaxed">
+//           {localPost.description}
+//         </p>
+//       </div>
 
+//       {/* Actions */}
+//       <div className="px-6 py-4 border-t border-gray-100">
+//         <div className="flex justify-between items-center">
+//           <div className="flex items-center gap-5">
+//             <button
+//               onClick={toggleLike}
+//               className="flex items-center gap-2 transition-all hover:-translate-y-0.5"
+//             >
+// {localPost.isliked ?
+// <div className="w-6 h-6 text-red-500 hover:text-red-600"><FilledHeartIcon /> </div>
+// :
+// <div className="w-6 h-6 text-gray-500 hover:text-red-500" > <OpenHeartIcon />  </div>
 
- function FeedPost({ post }: FeedPostProps) {
+// }
+//               <span className="font-medium text-gray-700">{localPost.likes}</span>
+//             </button>
+//             <button className="flex items-center gap-2 text-gray-500 hover:text-blue-600 transition-colors">
+//               <div  className="w-6 h-6"><CommentIcon /></div>
+//               <span className="font-medium">{localPost.comments}</span>
+//             </button>
+//           </div>
+//           <Button
+//             variant="outline"
+//             className="gap-2 border-purple-200 text-purple-700 hover:bg-purple-50 hover:text-purple-800"
+//           >
+//             <div className="w-5 h-5"><ShareIcon  /></div>
+//             Share
+//           </Button>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+-------------------
+ai
+function FeedPost({ post }: FeedPostProps) {
   const [localPost, setLocalPost] = React.useState(post);
   const [showAIDescription, setShowAIDescription] = React.useState(false);
   const [AiDescription, setAiDescription] = React.useState("");
@@ -326,7 +395,72 @@ interface FeedPostProps {
             <span className="text-sm tracking-wide">Share</span>
           </Button>
         </div>
-        
+        {/* {renderComments && (
+          <div className="mt-4 p-4 bg-purple-50 rounded-lg border border-purple-200 shadow-inner">
+            <div className="flex items-center border shadow-md p-2 border-amber-300 rounded-2xl  mt-3">
+              <img src={localPost.avatarUrl} alt="avatar"
+              className="w-14 h-14 rounded-full border-2 border-purple-300 shadow-inner"
+              />
+            <input type="text" name="comment" placeholder="i like this product " id="commentid" className="w-full outline-none px-4 "
+            onChange={(e)=>setCommentValue(e.target.value)}
+            />
+            <svg
+                onClick={handleCommentClick}
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="icon icon-tabler icons-tabler-outline icon-tabler-upload hover:text-purple-700 "
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
+                <path d="M7 9l5 -5l5 5" />
+                <path d="M12 4l0 12" />
+              </svg>
+          </div>
+          {commentValue && <p>{commentValue}</p>}
+          </div>
+          // <div className="mt-4 p-4 bg-purple-50 rounded-lg border border-purple-200 shadow-inner">
+          //   <div className="flex items-center justify-end border shadow-md mt-4 max-w-md mx-auto outline-amber-500  border-accent-foreground rounded-2xl p-2">
+          //     <input
+          //       type="text"
+          //       name="comment"
+          //       id="comment"
+          //       value={commentValue}
+          //       onChange={(e) => setCommentValue(e.target.value)}
+          //       className=""
+          //     />
+              // <svg
+              //   onClick={handleCommentClick}
+              //   xmlns="http://www.w3.org/2000/svg"
+              //   width="24"
+              //   height="24"
+              //   viewBox="0 0 24 24"
+              //   fill="none"
+              //   stroke="currentColor"
+              //   strokeWidth="2"
+              //   strokeLinecap="round"
+              //   strokeLinejoin="round"
+              //   className="icon icon-tabler icons-tabler-outline icon-tabler-upload"
+              // >
+              //   <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              //   <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
+              //   <path d="M7 9l5 -5l5 5" />
+              //   <path d="M12 4l0 12" />
+              // </svg>
+          //     {commentValue && <p>{commentValue}</p>}
+          //   </div>
+
+          //   <p className="text-sm text-purple-900 leading-relaxed">
+          //     Comments section coming soon...
+          //   </p>
+          // </div>
+        )} */}
         {renderComments && (
           <div className="mt-4 p-4 bg-gradient-to-r from-purple-50 to-amber-50 rounded-lg border border-amber-200 shadow-inner">
             <div className="comment-form relative">
@@ -439,4 +573,145 @@ interface FeedPostProps {
 
 export default FeedPost;
 
+function FeedPost({ post }: FeedPostProps) {
+  console.log("post is : ", post);
 
+  const [localPost, setLocalPost] = React.useState(post);
+
+  console.log("the local post is : ", localPost);
+  const toggleLike = () => {
+    setLocalPost(prev => ({
+      ...prev,
+      isliked: !prev.isliked,
+      likes: prev.isliked ? prev.likes - 1 : prev.likes + 1
+    }));
+  };
+
+  return (
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      {/* Header */}
+      <div className="flex items-center p-4 border-b">
+        <img
+          src={localPost.avatarUrl}
+          className="w-10 h-10 rounded-full"
+          alt="User avatar"
+        />
+        <div className="ml-3">
+          <h3 className="font-semibold text-lg">{localPost.description}</h3>
+          <div className="flex gap-2 text-sm text-gray-500">
+            {localPost.tags.map((tag, index) => (
+              <span key={index} className="bg-gray-100 px-2 py-1 rounded">
+                #{tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="p-4">
+        <p className="text-gray-700 mb-4">{localPost.description}</p>
+        <img
+          src={localPost.imageUrl}
+          alt="Post content"
+          className="w-full h-96 object-cover rounded-lg"
+        />
+      </div>
+
+      {/* Actions */}
+      <div className="p-4 border-t">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={toggleLike}
+              className="flex items-center gap-1 text-red-500 hover:text-red-600"
+            >
+              {localPost.isliked ? <FilledHeartIcon /> : <OpenHeartIcon />}
+              <span>{localPost.likes}</span>
+            </button>
+            <button className="flex items-center gap-1 text-gray-600 hover:text-gray-700">
+              <CommentIcon />
+              <span>{localPost.comments}</span>
+            </button>
+          </div>
+          <div className="flex items-center gap-4">
+            <span className="text-xl font-bold text-orange-500">
+              {localPost.comments}
+            </span>
+            <Button variant="outline" className="gap-2">
+              <ShareIcon />
+              Share
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+////////////////////////////////////////////
+{/* {renderComments && (
+          <div className="mt-4 p-4 bg-purple-50 rounded-lg border border-purple-200 shadow-inner">
+            <div className="flex items-center border shadow-md p-2 border-amber-300 rounded-2xl  mt-3">
+              <img src={localPost.avatarUrl} alt="avatar"
+              className="w-14 h-14 rounded-full border-2 border-purple-300 shadow-inner"
+              />
+            <input type="text" name="comment" placeholder="i like this product " id="commentid" className="w-full outline-none px-4 "
+            onChange={(e)=>setCommentValue(e.target.value)}
+            />
+            <svg
+                onClick={handleCommentClick}
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="icon icon-tabler icons-tabler-outline icon-tabler-upload hover:text-purple-700 "
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
+                <path d="M7 9l5 -5l5 5" />
+                <path d="M12 4l0 12" />
+              </svg>
+          </div>
+          {commentValue && <p>{commentValue}</p>}
+          </div>
+          // <div className="mt-4 p-4 bg-purple-50 rounded-lg border border-purple-200 shadow-inner">
+          //   <div className="flex items-center justify-end border shadow-md mt-4 max-w-md mx-auto outline-amber-500  border-accent-foreground rounded-2xl p-2">
+          //     <input
+          //       type="text"
+          //       name="comment"
+          //       id="comment"
+          //       value={commentValue}
+          //       onChange={(e) => setCommentValue(e.target.value)}
+          //       className=""
+          //     />
+              // <svg
+              //   onClick={handleCommentClick}
+              //   xmlns="http://www.w3.org/2000/svg"
+              //   width="24"
+              //   height="24"
+              //   viewBox="0 0 24 24"
+              //   fill="none"
+              //   stroke="currentColor"
+              //   strokeWidth="2"
+              //   strokeLinecap="round"
+              //   strokeLinejoin="round"
+              //   className="icon icon-tabler icons-tabler-outline icon-tabler-upload"
+              // >
+              //   <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              //   <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
+              //   <path d="M7 9l5 -5l5 5" />
+              //   <path d="M12 4l0 12" />
+              // </svg>
+          //     {commentValue && <p>{commentValue}</p>}
+          //   </div>
+
+          //   <p className="text-sm text-purple-900 leading-relaxed">
+          //     Comments section coming soon...
+          //   </p>
+          // </div>
+        )} */}
