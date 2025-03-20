@@ -1,7 +1,7 @@
 import type { Route } from "./+types/home";
 import Header from "./Header/Header";
 import React, { useEffect, useState } from "react";
-import NAVBAR from "../../shared/components/nav/NAVBAR";
+import NAVBAR from "./../../shared/components/nav/NAVBAR";
 
 export function meta() {
   return [
@@ -12,7 +12,7 @@ export function meta() {
 
 import { Form, redirect, useLoaderData, useActionData } from "react-router";
 import { Button } from "~/components/ui/button";
-import postDetails from "../../shared/database/TEMPData/PostData";
+import postDetails from "./../../shared/database/TEMPData/PostData";
 
 import { Cloudinary } from "@cloudinary/url-gen";
 import { auto } from "@cloudinary/url-gen/actions/resize";
@@ -36,24 +36,23 @@ import MiddleSidebar from "../../shared/components/fixedsidebar/Middleside/Middl
 import RightSidebar from "../../shared/components/fixedsidebar/RightSide/RightSidebar";
 import { CheckCircleIcon, UploadIcon, XIcon } from "lucide-react";
 import { ALlavatars, RandomAvatar } from "avatars/avatar";
-import type { Post } from "shared/types/post";
 
-// // Types
-// interface Post {
-//   dbid: string;
-//   id: number;
-//   avatarUrl: string;
-//   description: string;
-//   tags: string[];
-//   price: string;
-//   productName: string;
-//   imageUrl: string;
-//   isliked: boolean;
-//   likes: number;
-//   comments: number;
-// }
+// Types
+interface Post {
+  dbid: string;
+  id: number;
+  avatarUrl: string;
+  description: string;
+  tags: string[];
+  price: string;
+  productName: string;
+  imageUrl: string;
+  isliked: boolean;
+  likes: number;
+  comments: number;
+}
 
-const User_Avatar_image = ()=> RandomAvatar();
+const User_Avatar_image = RandomAvatar;
 console.log("User Avatar image is : ", User_Avatar_image);
 
 
@@ -95,11 +94,11 @@ export async function action({ request }: Route.ClientActionArgs) {
 // const imgResponse = await fetch(avturlapi);
 //       const imgBlob = await imgResponse.blob();
 //   const User_Avatar_image = await Cloudinary_Avatar_Upload(imgBlob);
-const user_avatar_url = User_Avatar_image();
+
   const newPost = {
     dbid: "",
     id: postDetails.length + 1,
-    avatarUrl: user_avatar_url,
+    avatarUrl: User_Avatar_image,
     description:
       formData.get("Product-Description")?.toString() || "No description",
     tags: (formData.get("Tags")?.toString() || "")
@@ -226,7 +225,7 @@ function CreatePostCard() {
         <div className="flex items-center gap-4 mb-6 p-4 bg-purple-50 rounded-xl">
           <img
             // src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"
-            src={User_Avatar_image()}
+            src={User_Avatar_image}
             className="w-14 h-14 rounded-full border-2 border-purple-200"
             alt="User"
           />

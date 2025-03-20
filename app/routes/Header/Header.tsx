@@ -20,6 +20,8 @@ import NewLogo from './../../../image.png';
 import React from "react";
 import logo from './../../../logo.png';
 import A_rbor from './../../../A_rbor.jpg';
+import Arbor_logo from './../../../uploads/img/Arbor_logo_flower.jpg';
+import Arbor_logo2 from './../../../uploads/img/logo2.jpg';
 function Header() {
   return (
     <div>
@@ -27,10 +29,10 @@ function Header() {
         <header className=" flex items-center justify-between p-4 bg-white border-b shadow-sm ">
           <div className=" headerlogocontainer flex items-center space-x-2 mx-2">
             <Link to="/" className="flex items-center space-x-2">
-
+              <img id="logo" src={Arbor_logo2} alt="logo" className=" bg-contain h-15 w-auto rounded-full bg-white mix-blend-multiply" />
               {/* <img id="logo" src={logo} alt="logo" className="h-22 w-auto rounded-full bg-white mix-blend-multiply" /> */}
-              <img id="logo" src={NewLogo} alt="logo" className="h-12 headerlogo w-auto  rounded-md " />
-              <img id="logo" src={A_rbor} alt="logo" className="h-20 w-auto rounded-full " />
+              {/* <img id="logo" src={NewLogo} alt="logo" className="h-12 headerlogo w-auto  rounded-md " /> */}
+              {/* <img id="logo" src={A_rbor} alt="logo" className="h-20 w-auto rounded-full " /> */}
               {/* <img id="logo" src={l3} alt="logo" className="h-22 w-auto rounded-full " /> */}
             
             </Link>
