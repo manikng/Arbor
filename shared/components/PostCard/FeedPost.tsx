@@ -29,6 +29,7 @@ interface Post {
   isliked: boolean;
   likes: number;
   comments: number;
+  userComments: string[];
 }
 
 interface FeedPostProps {
@@ -37,6 +38,8 @@ interface FeedPostProps {
 
 
  function FeedPost({ post }: FeedPostProps) {
+  console.log("posts in the feedposts",post);
+  
   const [localPost, setLocalPost] = React.useState(post);
   const [showAIDescription, setShowAIDescription] = React.useState(false);
   const [AiDescription, setAiDescription] = React.useState("");
@@ -46,7 +49,7 @@ interface FeedPostProps {
   const [commentValue, setCommentValue] = React.useState("");
   console.log("the avatar: ", localPost.avatarUrl);
   
-  const HandleAiDescriptionClick = async () => {
+  const HandleAiDescriptionClick: () => Promise<void> = async () => {
     // Immediately handle hide/cancel action
     if (showAIDescription || generatingAiDescription) {
       setShowAIDescription(false);
@@ -144,6 +147,7 @@ interface FeedPostProps {
       }));
     });
   }
+
 
   return (
     <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden group">

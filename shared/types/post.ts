@@ -1,6 +1,5 @@
 export interface Post {
     dbid: string;
-    
     id: string;
     avatarUrl: string;
     description: string;

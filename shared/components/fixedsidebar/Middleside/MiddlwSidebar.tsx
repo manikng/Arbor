@@ -10,6 +10,8 @@ posts: Post[];
 className?: string;
 }
 
+
+
 function MiddleSidebar ({ posts,className }: MiddleSidebarProps) {
 console.log("data in middle ", posts);
 return (
@@ -17,7 +19,7 @@ return (
 <CreatePostCard />
 <div className="space-y-6 h-screen">
 {posts.map((post, index) => (
-<FeedPost key={post.dbid || index} post={post} />
+<FeedPost key={index} post={post} />
 ))}
 </div>
 </div>

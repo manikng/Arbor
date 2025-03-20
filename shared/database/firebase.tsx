@@ -27,17 +27,30 @@ import { set ,ref, getDatabase } from "firebase/database";
 
 // import { collection, addDoc } from "firebase/firestore"; 
 
-export const FirebaseContext = createContext(null);
 const firebaseConfig = {
-    apiKey: "AIzaSyAS6SmDT21sDYh2kSYgI5QOpd_U9HZjZGM",
-    authDomain: "rentit-b4555.firebaseapp.com",
-    databaseURL: "https://rentit-b4555-default-rtdb.firebaseio.com",
-    projectId: "rentit-b4555",
-    storageBucket: "rentit-b4555.firebasestorage.app",
-    messagingSenderId: "866324838598",
-    appId: "1:866324838598:web:0f618cb51aa1a9e227bfc7",
-    measurementId: "G-PLNG6E31P1"
-  };
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
+};
+
+export const FirebaseContext = createContext(null);
+
+// export const FirebaseContext = createContext(null);
+// const firebaseConfig = {
+//     apiKey: "AIzaSyAS6SmDT21sDYh2kSYgI5QOpd_U9HZjZGM",
+//     authDomain: "rentit-b4555.firebaseapp.com",
+//     databaseURL: "https://rentit-b4555-default-rtdb.firebaseio.com",
+//     projectId: "rentit-b4555",
+//     storageBucket: "rentit-b4555.firebasestorage.app",
+//     messagingSenderId: "866324838598",
+//     appId: "1:866324838598:web:0f618cb51aa1a9e227bfc7",
+//     measurementId: "G-PLNG6E31P1"
+//   };
 
 
 export const useFirebase = ()=> useContext(FirebaseContext);

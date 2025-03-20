@@ -32,6 +32,12 @@ import {
 import { db } from "shared/database/firebase";
 import { CloudinaryUpload } from "./cloudUpload";
 
+
+
+
+
+
+
 interface PostData {
   id: number;
   avatarUrl: string;
@@ -139,13 +145,13 @@ export async function action({ request }: Route.ClientActionArgs) {
   }
 }
 
-async function handleImageUpload(formData: FormData) {
-  const imageFiles = formData.getAll("images") as File[];
-  if (imageFiles.length === 0) {
-    return "https://miro.medium.com/v2/resize:fit:700/1*wGMXTkdXX96kloQJf7wmbA.png";
-  }
-  return URL.createObjectURL(imageFiles[0]);
-}
+// async function handleImageUpload(formData: FormData) {
+//   const imageFiles = formData.getAll("images") as File[];
+//   if (imageFiles.length === 0) {
+//     return "https://miro.medium.com/v2/resize:fit:700/1*wGMXTkdXX96kloQJf7wmbA.png";
+//   }
+//   return URL.createObjectURL(imageFiles[0]);
+// }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
   console.log("lod is ", loaderData);

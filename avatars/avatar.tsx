@@ -26,7 +26,9 @@ export  const ALlavatars = [
     'https://res.cloudinary.com/dkxicfpye/image/upload/v1742461459/hfxqm0dae03rbjf1qubj.jpg'
 ]
 
-export function RandomAvatar(){
+export function RandomAvatar() {
     const randomIndex = Math.floor(Math.random() * ALlavatars.length);
+    console.log("rand idx is: ",randomIndex);
+    
     return ALlavatars[randomIndex];
 }
