@@ -1,12 +1,6 @@
 {
     "version": 2,
-    "rewrites": [
-        {
-            "source": "/api/:path*",
-            "destination": "https://rentit-b4555-default-rtdb.firebaseio.com/:path*",
-           
-        }
-    ],
+  
     "builds": [
         {
             "src": "index.js",
