@@ -35,7 +35,7 @@ import LeftSidebar from "../../shared/components/fixedsidebar/Leftsidebar/LeftSi
 import MiddleSidebar from "../../shared/components/fixedsidebar/Middleside/MiddlwSidebar";
 import RightSidebar from "../../shared/components/fixedsidebar/RightSide/RightSidebar";
 import { CheckCircleIcon, UploadIcon, XIcon } from "lucide-react";
-import { ALlavatars, RandomAvatar } from "avatars/avatar";
+import { ALlavatars } from "avatars/avatar";
 import type { Post } from "shared/types/post";
 
 

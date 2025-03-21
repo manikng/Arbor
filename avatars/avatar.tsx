@@ -26,9 +26,31 @@ export  const ALlavatars = [
     'https://res.cloudinary.com/dkxicfpye/image/upload/v1742461459/hfxqm0dae03rbjf1qubj.jpg'
 ]
 
-export function RandomAvatar() {
-    const randomIndex = Math.floor(Math.random() * ALlavatars.length);
-    console.log("rand idx is: ",randomIndex);
+// export function RandomAvatar() {
+//     const randomIndex = Math.floor(Math.random() * ALlavatars.length);
+//     console.log("rand idx is: ",randomIndex);
     
-    return ALlavatars[randomIndex];
-}
+//     return ALlavatars[randomIndex];
+// }
+
+// export function RandomAvatar() {
+//     // Generate a random index using crypto.getRandomValues
+//     const randomIndex = getRandomInt(ALlavatars.length); // Use the helper function
+
+//     console.log("rand idx is: ", randomIndex);
+
+//     return ALlavatars[randomIndex];
+// }
+
+// Helper function to generate a random integer within a range
+// function getRandomInt(max: number): number {
+//     const array = new Uint32Array(1); // Create a typed array to hold a single random number
+//     if (typeof window !== 'undefined' && window.crypto) {
+//         window.crypto.getRandomValues(array); // Fill the array with a random unsigned 32-bit integer
+//     } else {
+//         throw new Error('Crypto API not available');
+//     }
+//     const randomNumber = array[0]; // Extract the random number
+//     const scaledRandom = Math.floor((randomNumber / 0xFFFFFFFF) * max); // Scale the number to fit within the desired range (0 to max-1)
+//     return scaledRandom;
+// }
