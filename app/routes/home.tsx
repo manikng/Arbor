@@ -5,21 +5,17 @@ import NAVBAR from "../../shared/components/nav/NAVBAR";
 
 export function meta() {
   return [
-    { title: "Creativecreata - Social Marketplace" },
+    { title: "Arbor -The Social Marketplace" },
     { name: "description", content: "Connect and create with community" },
   ];
 }
 
-import { Form, redirect, useLoaderData, useActionData } from "react-router";
+import { Form, useLoaderData, useActionData } from "react-router";
 import { Button } from "~/components/ui/button";
 import postDetails from "../../shared/database/TEMPData/PostData";
 
-import { Cloudinary } from "@cloudinary/url-gen";
-import { auto } from "@cloudinary/url-gen/actions/resize";
-import { autoGravity } from "@cloudinary/url-gen/qualifiers/gravity";
-import { AdvancedImage } from "@cloudinary/react";
-import { Cloudinary_Avatar_Upload, CloudinaryUpload } from "./cloudUpload";
-import { set } from "firebase/database";
+import { CloudinaryUpload } from "./cloudUpload";
+
 import {
   addDoc,
   collection,
@@ -35,7 +31,6 @@ import LeftSidebar from "../../shared/components/fixedsidebar/Leftsidebar/LeftSi
 import MiddleSidebar from "../../shared/components/fixedsidebar/Middleside/MiddlwSidebar";
 import RightSidebar from "../../shared/components/fixedsidebar/RightSide/RightSidebar";
 import { CheckCircleIcon, UploadIcon, XIcon } from "lucide-react";
-import { ALlavatars } from "avatars/avatar";
 import type { Post } from "shared/types/post";
 
 
@@ -131,11 +126,7 @@ export default function Home() {
     <div className="h-dvh  w-full mb-4">
       <Header />
       <NAVBAR />
-      {/* <div className="flex w-full mt-10  h-screen">
-        <LeftSidebar username="" />
-        <MiddleSidebar posts={posts} />
-        <RightSidebar />
-      </div> */}
+      
       <div className="flex w-full mt-10 min-h-screen">
         <LeftSidebar username="" className="flex-shrink-0" />
         <MiddleSidebar posts={posts} className="flex-grow" />
@@ -176,10 +167,6 @@ function CreatePostCard() {
     }
   }, [actionData]);
 
-  // useEffect(() => {
-  //   // Generate avatar URL on the client-side after component mounts
-  //   setAvatarUrl(User_Avatar_image);
-  // }, []);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -188,12 +175,13 @@ function CreatePostCard() {
       setImage(file);
     }
   };
+  
 
   return (
     <Form
       method="post"
       encType="multipart/form-data"
-      about="/"
+      action="/"
 
       className="mb-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-orange-200"
     >
