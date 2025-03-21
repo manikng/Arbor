@@ -4,9 +4,7 @@
         {
             "source": "/api/:path*",
             "destination": "https://rentit-b4555-default-rtdb.firebaseio.com/:path*",
-            "headers": {
-                "x-vercel-cache": "MISS"
-            }
+           
         }
     ],
     "builds": [
