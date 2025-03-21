@@ -30,6 +30,11 @@ for e.g:
 ![alt text](image-10.png)
 //----------
 
+### very very important to use the useEffect in the component to update the ui
+for e.g:
+//the ui not updating is due to 
+![alt text](image-19.png) : not using the useEffect in the middle sidebar component
+###
 using nested object as props result errror:
 // Types
 interface Post {

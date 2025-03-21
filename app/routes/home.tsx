@@ -40,90 +40,91 @@ console.log("User Avatar image is : ", User_Avatar_image);
 
 
 
-export async function loader() {
-  //and when load it using loader then fetch its dbid and post data
+// export async function loader() {
+//   //and when load it using loader then fetch its dbid and post data
 
-  const querySnapshotPostData = await getDocs(collection(db, "posts"));
+//   const querySnapshotPostData = await getDocs(collection(db, "posts"));
 
   
   
-  const AllPosts = querySnapshotPostData.docs.map((doc) => {
-    const fetchedData = { dbid: doc.id, PostData: doc.data() };
-    const postdata = { ...fetchedData.PostData, id: doc.id };
+//   const AllPosts = querySnapshotPostData.docs.map((doc) => {
+//     const fetchedData = { dbid: doc.id, PostData: doc.data() };
+//     const postdata = { ...fetchedData.PostData, id: doc.id };
    
 
+//     return postdata;
+//   });
+//   console.log("All posts are : ", AllPosts);
+//   return { posts: AllPosts };
+// }
+
+export async function loader({ context }: Route.LoaderArgs) {
+  let querySnapshotPostData = await getDocs(collection(db, "posts")); 
+  
+  let AllPosts = querySnapshotPostData.docs.map((doc) => {
+    let fetchedData = { dbid: doc.id, PostData: doc.data() };
+    let postdata = { ...fetchedData.PostData, id: doc.id };
+    console.log("Post Data is : ", postdata);
+    
     return postdata;
   });
-  console.log("All posts are : ", AllPosts);
-  return { posts: AllPosts };
+  let res = Object.values(AllPosts);
+  console.log("All Posts  : ", res);
+  return { posts: res, message: "Hello from Vercel" };
 }
 
-
-
-
-export async function action({ request }: Route.ClientActionArgs) {
-  //when inserting into the db no dbid is present as it only generate after the data pushed into the db
-  //so when user post a  img just take sample id and put  dbid as empty string
-  //and when load it using loader then fetch its dbid and post data
-
-  const formData = await request.formData();
-
-  const imageUrlfromCloudinary = await CloudinaryUpload(formData);
+export async function clientAction({request,}: Route.ClientActionArgs) {
+  let formData = await request.formData();
+  let imageUrlfromCloudinary = await CloudinaryUpload(formData);
   console.log("Image URL in cloudinary is :", imageUrlfromCloudinary);
-// const imgResponse = await fetch(avturlapi);
-//       const imgBlob = await imgResponse.blob();
-//   const User_Avatar_image = await Cloudinary_Avatar_Upload(imgBlob);
-const user_avatar_url = User_Avatar_image;
-  const newPost = {
-    dbid: "",
-    id: postDetails.length + 1,
-    avatarUrl: user_avatar_url,
-    description:
-      formData.get("Product-Description")?.toString() || "No description",
-    tags: (formData.get("Tags")?.toString() || "")
-      .split(",")
-      .map((t) => t.trim()),
-    price: `${formData.get("Price")?.toString() || "0"}`,
-    productName: formData.get("Product-Name")?.toString() || "Unnamed Product",
-    imageUrl: imageUrlfromCloudinary,
-    isliked: false,
-    likes: 0,
-    comments: 0,
-  };
-
-  try {
-    const docRef = await addDoc(collection(db, "posts"), newPost);
-    console.log("Document written with ID: ", docRef.id);
-
-    postDetails.push(newPost);
-
-    // Return success instead of redirecting
-    return {
-      success: true,
-      message: "Post created successfully!",
-      // Add redirect header
-      headers: {
-        Location: "/",
-      },
+  let user_avatar_url = User_Avatar_image;
+  let newPost = {
+      dbid: "",
+      id: postDetails.length + 1,
+      avatarUrl: user_avatar_url,
+      description:
+        formData.get("Product-Description")?.toString() || "No description",
+      tags: (formData.get("Tags")?.toString() || "")
+        .split(",")
+        .map((t) => t.trim()),
+      price: `${formData.get("Price")?.toString() || "0"}`,
+      productName: formData.get("Product-Name")?.toString() || "Unnamed Product",
+      imageUrl: imageUrlfromCloudinary,
+      isliked: false,
+      likes: 0,
+      comments: 0,
     };
-  } catch (error) {
-    console.error("Error adding document: ", error);
-    return {
-      success: false,
-      message: "Failed to create post",
-      headers: {
-        Location: "/",
-      },
-    };
-  }
+
+    try {
+      let docRef = await addDoc(collection(db, "posts"), newPost);
+      console.log("Document written with ID: ", docRef.id);
+  
+      postDetails.push(newPost);
+  
+      // Return success instead of redirecting
+      return {
+        success: true,
+        message: "Post created successfully!",
+        
+      };
+    } catch (error) {
+      console.error("Error adding document: ", error);
+      return {
+        success: false,
+        message: "Failed to create post",
+        
+      };
+    }
+  
 }
+
 
 export default function Home() {
   const { posts } = useLoaderData() as { posts: Post[] };
   console.log("now the post with their dbid are home mai : ", posts);
 
   return (
-    <div className="h-dvh  w-full mb-4">
+    <div className="h-auto  w-full mb-4">
       <Header />
       <NAVBAR />
       
@@ -165,7 +166,7 @@ function CreatePostCard() {
       ) as HTMLInputElement;
       if (fileInput) fileInput.value = "";
     }
-  }, [actionData]);
+  }, [actionData, setPreviewImage, setProductDescription, setProductName, setTags, setPrice, setImage]);
 
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -181,7 +182,7 @@ function CreatePostCard() {
     <Form
       method="post"
       encType="multipart/form-data"
-      action="/"
+      
 
       className="mb-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-orange-200"
     >

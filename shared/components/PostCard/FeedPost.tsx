@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { setDoc, updateDoc } from "firebase/firestore";
+import { collection, getDocs, setDoc, updateDoc } from "firebase/firestore";
 
 import { Button } from "~/components/ui/button";
 import {
@@ -37,8 +37,9 @@ interface FeedPostProps {
 }
 
 
+
  function FeedPost({ post }: FeedPostProps) {
-  console.log("posts in the feedposts",post);
+  console.log("posts in the prop",post);
   
   const [localPost, setLocalPost] = React.useState(post);
   const [showAIDescription, setShowAIDescription] = React.useState(false);
