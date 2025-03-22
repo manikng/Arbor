@@ -4,7 +4,7 @@ import Header from "./Header/Header";
 import React, { useEffect, useState } from "react";
 import NAVBAR from "../../shared/components/nav/NAVBAR";
 
-import { Form, useLoaderData, useActionData } from "react-router";
+import { Form, useLoaderData, useActionData, useFetcher } from "react-router"; // added useFetcher
 import { Button } from "~/components/ui/button";
 import postDetails from "../../shared/database/TEMPData/PostData";
 
@@ -100,7 +100,27 @@ export async function clientAction({request,}: Route.ClientActionArgs) {
         };
       }
     
-}
+}// console.log("User Avatar image is : ", User_Avatar_image);
+
+
+
+// export async function loader() {
+//   //and when load it using loader then fetch its dbid and post data
+
+//   const querySnapshotPostData = await getDocs(collection(db, "posts"));
+
+  
+  
+//   const AllPosts = querySnapshotPostData.docs.map((doc) => {
+//     const fetchedData = { dbid: doc.id, PostData: doc.data() };
+//     const postdata = { ...fetchedData.PostData, id: doc.id };
+   
+
+//     return postdata;
+//   });
+//   console.log("All posts are : ", AllPosts);
+//   return { posts: AllPosts };
+// }
 
 export default function Home({ loaderData ,actionData }: Route.ComponentProps) {
   let AllpostsArray = loaderData.posts;
@@ -163,13 +183,14 @@ function CreatePostCard() {
       }
     };
     
+    // Replace the plain Form with fetcher.Form by first initializing fetcher:
+    const fetcher = useFetcher();
   
     return (
-      <Form
+      <fetcher.Form
         method="post"
         encType="multipart/form-data"
-        action="/"
-  
+        // remove or adjust the action prop if needed
         className="mb-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-orange-200"
       >
         <div className="p-6">
@@ -321,9 +342,8 @@ function CreatePostCard() {
           </Button>
         </div>
         </div>
-      </Form>
+      </fetcher.Form>
     );
   }
   
   export { CreatePostCard };
-  
