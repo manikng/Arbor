@@ -190,7 +190,7 @@ function CreatePostCard() {
           <div className={`mb-6 p-4 rounded-lg flex items-center gap-3 ${
             fetcher.data.success ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
           }`}>
-            <span>{fetcher.data.message}</span>
+            
           </div>
         )}
 
@@ -289,7 +289,7 @@ function CreatePostCard() {
                 <p className="text-gray-600 font-medium">
                   Drag & drop or click to upload
                 </p>
-                <p className="text-sm text-gray-400">PNG, JPG up to 5MB</p>
+                <p className="text-sm text-gray-400">PNG, JPG ,IMG </p>
               </div>
             </label>
           </div>
@@ -332,15 +332,17 @@ function CreatePostCard() {
           </button>
           <Button
             type="submit"
-            className="bg-gradient-to-br from-purple-600 to-orange-600 hover:from-purple-700 hover:to-orange-700 text-white px-8 py-2.5 rounded-lg shadow-sm hover:shadow-lg transition-all"
+            className="bg-gradient-to-br from-orange-600 to-purple-600  hover:from-purple-700 hover:to-orange-700 text-white px-8 py-2.5 rounded-lg shadow-sm hover:shadow-lg transition-all"
           >
-            Publish Post
+            { isSubmitting ? "Publishing Post" : "Publish Post" }
           </Button>
-          {fetcher.data?.success && (
+          
+          {/* {fetcher.data?.success && (
             <div className="flex items-center gap-2">
               {fetcher.data.message}
             </div>)
-            }
+            } */}
+         
         </div>
       </div>
     </fetcher.Form>
