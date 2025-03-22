@@ -1,2 +1,0 @@
-// const avturlapi = `https://xsgames.co/randomusers/avatar.php?g=${Math.floor(Math.random() * 10 + 1) < 5 ? "male" : "female"}`;
-// console.log("Avatar url is : ", avturlapi);

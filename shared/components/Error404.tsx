@@ -2,7 +2,7 @@ import React from 'react'
 
 function Error404() {
   return (
-    <div>Error404</div>
+    <div>I AM SOOry we are fixing it retry or something else</div>
   )
 }
 

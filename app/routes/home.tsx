@@ -13,9 +13,9 @@ export function meta() {
 
 import { Form, useLoaderData, useActionData } from "react-router";
 import { Button } from "~/components/ui/button";
-import postDetails from "../../shared/database/TEMPData/PostData";
 
 import { CloudinaryUpload } from "./cloudUpload";
+import postDetails from "./../../shared/database/TEMPData/PostData";
 
 import {
   addDoc,
@@ -51,10 +51,8 @@ export async function loader() {
     return postdata;
   });
   console.log("All posts are : ", AllPosts);
-  return {  posts: AllPosts };
+  return { posts: AllPosts };
 }
-
-
 
 export default function Home() {
   let posts = useLoaderData() as { posts: Post[] };
@@ -135,28 +133,8 @@ function CreatePostCard() {
   const actionData = useActionData<{ success: boolean; message: string }>();
   console.log("Action data is : ", actionData);
   let fetcher = useFetcher();
-  const isSubmitting = fetcher.state === 'submitting';
-
-  // Reset form when submission is successful
-  // useEffect(() => {
-  //   if (actionData?.success) {
-  //     setPreviewImage(null);
-  //     setProductDescription("");
-  //     setProductName("");
-  //     setTags("");
-  //     setPrice("");
-  //     setImage(null);
-
-  //     // Reset file input DOM element
-  //     const fileInput = document.getElementById(
-  //       "image-upload"
-  //     ) as HTMLInputElement;
-  //     if (fileInput) fileInput.value = "";
-  //   }
-  // }, [actionData]);
-
-   // Reset form on successful submission
-   useEffect(() => {
+  const isSubmitting = fetcher.state === "submitting";
+  useEffect(() => {
     if (fetcher.data?.success) {
       setPreviewImage(null);
       setProductDescription("");
@@ -164,11 +142,12 @@ function CreatePostCard() {
       setTags("");
       setPrice("");
       setImage(null);
-      const fileInput = document.getElementById("image-upload") as HTMLInputElement;
+      const fileInput = document.getElementById(
+        "image-upload"
+      ) as HTMLInputElement;
       if (fileInput) fileInput.value = "";
     }
   }, [fetcher.data]);
-
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -185,15 +164,18 @@ function CreatePostCard() {
       className="mb-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-orange-200"
     >
       <div className="p-6">
-               {/* Status Messages */}
-               {fetcher.data?.message && (
-          <div className={`mb-6 p-4 rounded-lg flex items-center gap-3 ${
-            fetcher.data.success ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-          }`}>
+        {/* Status Messages */}
+        {fetcher.data?.message && (
+          <div
+            className={`mb-6 p-4 rounded-lg flex items-center gap-3 ${
+              fetcher.data.success
+                ? "bg-green-100 text-green-800"
+                : "bg-red-100 text-red-800"
+            }`}
+          >
             <span>{fetcher.data.message}</span>
           </div>
         )}
-
 
         {/* Author Section */}
         <div className="flex items-center gap-4 mb-6 p-4 bg-purple-50 rounded-xl">
@@ -334,13 +316,8 @@ function CreatePostCard() {
             type="submit"
             className="bg-gradient-to-br from-purple-600 to-orange-600 hover:from-purple-700 hover:to-orange-700 text-white px-8 py-2.5 rounded-lg shadow-sm hover:shadow-lg transition-all"
           >
-            Publish Post
+           { isSubmitting ? "Publishing Post " :" Publish Post"}
           </Button>
-          {fetcher.data?.success && (
-            <div className="flex items-center gap-2">
-              {fetcher.data.message}
-            </div>)
-            }
         </div>
       </div>
     </fetcher.Form>
