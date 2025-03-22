@@ -11,19 +11,5 @@
         {
           "src": "/(.*)",
           "dest": "/"
-        }],
-    "env": {
-        "VITE_HF_ACCESS_TOKEN": "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",
-        "VITE_GEMINI_API_KEY": "AIzaSyCcVMKajtC9jZAsI8vYCDPz_rRyLm5mhuc",
-        "VITE_CLOUDINARY_API_KEY": "386896945267213",
-        "VITE_CLOUDINARY_URL": "cloudinary://386896945267213:y__pGcWgCpDbLRqCqJ1QWVNKafg@dkxicfpye",
-        "VITE_FIREBASE_API_KEY": "AIzaSyAS6SmDT21sDYh2kSYgI5QOpd_U9HZjZGM",
-        "VITE_FIREBASE_AUTH_DOMAIN": "rentit-b4555.firebaseapp.com",
-        "VITE_FIREBASE_DATABASE_URL": "https://rentit-b4555-default-rtdb.firebaseio.com",
-        "VITE_FIREBASE_PROJECT_ID": "rentit-b4555",
-        "VITE_FIREBASE_STORAGE_BUCKET": "rentit-b4555.firebasestorage.app",
-        "VITE_FIREBASE_MESSAGING_SENDER_ID": "866324838598",
-        "VITE_FIREBASE_APP_ID": "1:866324838598:web:0f618cb51aa1a9e227bfc7",
-        "VITE_FIREBASE_MEASUREMENT_ID": "G-PLNG6E31P1"
-    }
+        }]
 }
